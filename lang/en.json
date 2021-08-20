@@ -1,0 +1,26 @@
+{
+  "sing_in": "Sing in",
+  "registration": "Registration",
+  "email": "E-mail",
+  "password": "Password",
+  "login_registration": "Login / Registration",
+  "login_button": "LOG IN",
+  "registration_button": "REGISTER",
+  "my_tasks": "My Tasks",
+  "sort_by": "Sort by",
+  "name": "Name",
+  "date": "Date",
+  "back": "Back",
+  "edit_task": "Edit Task",
+  "add_task": "Add Task",
+  "task_details": "Task Details",
+  "notification": "Notification",
+  "description": "Description",
+  "priority": "Priority",
+  "title": "Title",
+  "before": "before",
+  "select": "Select",
+  "save_event": "Save event",
+  "delete_event": "Delete event"
+
+}

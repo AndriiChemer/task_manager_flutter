@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_task_manager/bloc/blocs.dart';
+import 'package:flutter_task_manager/ui/screens/screens.dart';
+import 'package:flutter_task_manager/ui/widgets/widgets.dart';
+import 'package:flutter_task_manager/utils/utils.dart';
+
+part 'registration_form_page.dart';
+
+part 'login_form_page.dart';
+
+class LoginRegistrationScreen extends StatelessWidget {
+  // static const String id = "/";
+  static const String id = "/login_registration";
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if(state is SuccessState) {
+              _openTaskListScreen(context);
+            } else if(state is FailState) {
+              _showErrorDialogMessage(context, state.message);
+            }
+          },
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 40, right: 40,),
+              child: BlocBuilder<LoginRegistrationBloc, LoginRegistrationState>(
+                  builder: (context, state) {
+                    if (state is LoginState) {
+                      return _buildLoginForm();
+                    } else if (state is RegistrationState) {
+                      return _buildRegistrationForm();
+                    } else {
+                      return Container();
+                    }
+                  }
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginForm() {
+    return LoginFormPage();
+  }
+
+  Widget _buildRegistrationForm() {
+    return RegistrationFormPage();
+  }
+
+  void _showErrorDialogMessage(BuildContext context, String message) {
+    context.showNegativeMessage(message);
+  }
+
+  void _openTaskListScreen(BuildContext context) {
+    Navigator.of(context).pushNamedAndRemoveUntil(TaskListScreen.id, (Route<dynamic> route) => false);
+  }
+}
