@@ -23,12 +23,10 @@ class _SelectDateTimeWidgetState extends State<SelectDateTimeWidget> {
 
   @override
   void initState() {
-    if(widget.initialTimeStamp != null) {
-      selectDateCubit.setTimeStamp(widget.initialTimeStamp!);
-    }
-
+    initInitialTimestamp();
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -119,5 +117,13 @@ class _SelectDateTimeWidgetState extends State<SelectDateTimeWidget> {
     );
 
     return selectedTime;
+  }
+
+  void initInitialTimestamp() {
+    if(widget.initialTimeStamp != null) {
+      var date = new DateTime.fromMillisecondsSinceEpoch(widget.initialTimeStamp! * 1000);
+      selectDateCubit.onNewDateSelected(date);
+      widget.controller?.add(date);
+    }
   }
 }

@@ -13,7 +13,7 @@ abstract class Api {
 
   Future<Response> deleteTask(int taskId, String token);
 
-  Future<Response> updateTask(int taskId, TaskRequest taskRequest);
+  Future<Response> updateTask(int taskId, String token, TaskRequest taskRequest);
 
   Future<Response> getTaskDetails(int taskId);
 }

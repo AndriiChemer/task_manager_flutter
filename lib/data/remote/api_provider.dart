@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_task_manager/data/notifiers/auth_notifier.dart';
+import 'package:flutter_task_manager/core/notifiers/auth_notifier.dart';
 import 'package:flutter_task_manager/data/remote/remote.dart';
 
 import 'api.dart';
@@ -8,11 +8,11 @@ const String BASE_URL = '​https://testapi.doitserver.in.ua/api';
 ///PATHs
 const String CREATE_USER = '/users';
 const String AUTH_USER = '/auth';
-const String TASK_LIST = '/tasks';
-const String CREATE_TASK = TASK_LIST;
-const String GET_TASK_DETAILS = TASK_LIST;
-const String DELETE_TASK = TASK_LIST;
-const String UPDATE_TASK = TASK_LIST;
+const String GET_TASK_LIST = '/tasks';
+const String CREATE_TASK = GET_TASK_LIST;
+const String GET_TASK_DETAILS = GET_TASK_LIST;
+const String DELETE_TASK = GET_TASK_LIST;
+const String UPDATE_TASK = GET_TASK_LIST;
 
 class ApiProvider implements Api {
   static final dio = Dio();
@@ -23,11 +23,6 @@ class ApiProvider implements Api {
         'Content-Type': 'application/json',
       }
   );
-
-  // Map<String, String> headers = {
-  //   'accept': 'application/json',
-  //   'Content-Type': 'application/json',
-  // };
 
   factory ApiProvider([AuthNotifier? authNotifier]) {
     return ApiProvider._initialize(authNotifier);
@@ -43,7 +38,7 @@ class ApiProvider implements Api {
         request: false,
         requestBody: true,
         responseBody: true,
-        requestHeader: false,
+        requestHeader: true,
       ));
   }
 
@@ -61,7 +56,7 @@ class ApiProvider implements Api {
   /// ==================TASK API========================
   @override
   Future<Response> getTaskList(String token, String sortType, String orderBy) async { // sortType = title, orderBy = asc
-    var query = "$TASK_LIST?sort=$sortType%20$orderBy";
+    var query = "$GET_TASK_LIST?sort=$sortType%20$orderBy";
     options.headers?["Authorization"] = "Bearer $token";
     return await dio.get(query, options: options);
   }
@@ -79,18 +74,14 @@ class ApiProvider implements Api {
 
   @override
   Future<Response> deleteTask(int taskId, String token) async {
-    // headers["Authorization"] = "Bearer $token";
-    // var options = Options(
-    //     headers: headers
-    // );
-
     options.headers?["Authorization"] = "Bearer $token";
     return await dio.delete("$DELETE_TASK/$taskId", options: options);
   }
 
   @override
-  Future<Response> updateTask(int taskId, TaskRequest taskRequest) async {
-    return await dio.put("$UPDATE_TASK/$taskId", data: taskRequest.toJson());
+  Future<Response> updateTask(int taskId, String token, TaskRequest taskRequest) async {
+    options.headers?["Authorization"] = "Bearer $token";
+    return await dio.put("$UPDATE_TASK/$taskId", options: options, data: taskRequest.toJson());
   }
 }
 

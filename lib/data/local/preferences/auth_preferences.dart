@@ -1,4 +1,3 @@
-import 'package:flutter_task_manager/data/exceptions/exceptions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthPreferences {

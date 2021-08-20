@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_task_manager/data/converters/converters.dart';
+import 'package:flutter_task_manager/core/converters/converters.dart';
 import 'package:flutter_task_manager/data/repository/repository.dart';
-import 'package:flutter_task_manager/ui/models/models.dart';
+import 'package:flutter_task_manager/data/models/models.dart';
 import 'package:meta/meta.dart';
 
 part 'tasks_event.dart';

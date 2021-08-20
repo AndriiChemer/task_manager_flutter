@@ -32,11 +32,21 @@ class TaskRepository with ErrorHandler {
   Future<TaskResponse> createTask(String title, String description, String priority, int dueBy) async {
     try {
       final String token = await AuthPreferences.getToken();
-      final TaskRequest taskRequest = TaskRequest(title: title, priority: priority, dueBy: dueBy, description: description);
+      final TaskRequest taskRequest = TaskRequest(title: title, priority: priority, dueBy: dueBy);
       var response = await api.createTask(token, taskRequest);
       var taskResponseJson = response.data["task"];
 
       return TaskResponse.fromJson(taskResponseJson);
+    } catch(error) {
+      throw getErrorMessage(error);
+    }
+  }
+
+  Future<void> updateTask(int taskId, String title, String description, String priority, int dueBy) async {
+    try {
+      final String token = await AuthPreferences.getToken();
+      final TaskRequest taskRequest = TaskRequest(title: title, priority: priority, dueBy: dueBy);
+      await api.updateTask(taskId, token, taskRequest);
     } catch(error) {
       throw getErrorMessage(error);
     }

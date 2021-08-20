@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_task_manager/data/exceptions/exceptions.dart';
-import 'package:flutter_task_manager/data/exceptions/remote_exception.dart';
+import 'package:flutter_task_manager/core/exceptions/exceptions.dart';
 import 'package:flutter_task_manager/data/remote/remote.dart';
 
 class ErrorHandler {

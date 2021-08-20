@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task_manager/bloc/blocs.dart';
-import 'package:flutter_task_manager/data/converters/converters.dart';
-import 'package:flutter_task_manager/data/notifiers/notifiers.dart';
+import 'package:flutter_task_manager/core/converters/converters.dart';
+import 'package:flutter_task_manager/core/notifiers/notifiers.dart';
 import 'package:flutter_task_manager/data/remote/remote.dart';
 import 'package:flutter_task_manager/data/repository/repository.dart';
 import 'package:flutter_task_manager/ui/screens/screens.dart';
@@ -54,9 +54,9 @@ class AppRouter {
     return MaterialPageRoute(
         builder: (_) => MultiBlocProvider(
           providers: [
-            BlocProvider(create: (_) => AuthStateCubit(authNotifier: authNotifier)),
-            BlocProvider(create: (_) => _tasksBloc),
-            BlocProvider(create: (_) => _addEditTaskBloc),
+            BlocProvider.value(value: AuthStateCubit(authNotifier: authNotifier)),
+            BlocProvider.value(value: _tasksBloc),
+            BlocProvider.value(value: _addEditTaskBloc),
           ],
           child: TaskListScreen(),
         )

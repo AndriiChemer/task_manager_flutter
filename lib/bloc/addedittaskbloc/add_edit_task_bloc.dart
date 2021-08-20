@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_task_manager/bloc/blocs.dart';
-import 'package:flutter_task_manager/data/converters/converters.dart';
+import 'package:flutter_task_manager/core/converters/converters.dart';
 import 'package:flutter_task_manager/data/remote/remote.dart';
 import 'package:flutter_task_manager/data/repository/repository.dart';
-import 'package:flutter_task_manager/ui/models/models.dart';
+import 'package:flutter_task_manager/data/models/models.dart';
 import 'package:meta/meta.dart';
 
 part 'add_edit_task_event.dart';
@@ -33,14 +33,14 @@ class AddEditTaskBloc extends Bloc<AddEditTaskEvent, AddEditTaskState> {
 
   Stream<AddEditTaskState> _mapAddTaskState(AddTaskEvent event) async* {
     String? title = event.title;
-    String? description = event.description;
+    String? description = event.description ?? '';
     String? priority = event.priority;
     DateTime? dateTime = event.dateTime;
 
     var isFieldsNotValid = _isFieldsNotNull(title, description, priority, dateTime);
 
     if(isFieldsNotValid) {
-      yield ValidationTaskFail(message: "Please select all fields");
+      yield ValidationTaskFail(message: "fill_in_all_fields");
       return;
     }
 
@@ -48,26 +48,50 @@ class AddEditTaskBloc extends Bloc<AddEditTaskEvent, AddEditTaskState> {
       yield AddEditTaskLoading();
 
       var dateTimeMilliseconds = dateTime!.millisecondsSinceEpoch ~/ 1000;
-      print("ANDRII: $dateTimeMilliseconds");
 
-      TaskResponse taskResponse = await taskRepository.createTask(title!, 'description', priority!, dateTimeMilliseconds);
+      TaskResponse taskResponse = await taskRepository.createTask(title!, description, priority!, dateTimeMilliseconds);
       TaskModel taskModel = taskConverter.convert(taskResponse);
       tasksBloc.addNewTask(taskModel);
 
       yield AddedTaskSuccess();
     } catch(error) {
-      yield ValidationTaskFail(message: error.toString());
+      yield AddEditTaskFail(message: error.toString());
     }
   }
 
   Stream<AddEditTaskState> _mapEditTaskState(EditTaskEvent event) async* {
     TaskModel taskModel = event.taskModel;
     String? title = event.title;
-    String? description = event.description;
+    String? description = event.description ?? '';
     String? priority = event.priority;
     DateTime? dateTime = event.dateTime;
 
+    var isFieldsNotValid = _isFieldsNotNull(title, description, priority, dateTime);
+    
 
+    if(isFieldsNotValid) {
+      yield ValidationTaskFail(message: "fill_in_all_fields");
+      return;
+    }
+
+    var hasNotTaskChanges = _hasNotTaskChanges(taskModel, title!, description, priority!, dateTime!);
+    if(hasNotTaskChanges) {
+      yield ValidationTaskFail(message: "task_does_not_have_changes");
+      return;
+    }
+
+    try {
+      yield AddEditTaskLoading();
+
+      var dateTimeMilliseconds = dateTime.millisecondsSinceEpoch ~/ 1000;
+      var taskId = taskModel.id;
+
+      await taskRepository.updateTask(taskId, title, description, priority, dateTimeMilliseconds);
+
+      yield EditTaskSuccess(taskId: taskId);
+    } catch(error) {
+      yield AddEditTaskFail(message: error.toString());
+    }
   }
 
   bool _isFieldsNotNull(String? title, String? description, String? priority, DateTime? dateTime) {
@@ -78,6 +102,12 @@ class AddEditTaskBloc extends Bloc<AddEditTaskEvent, AddEditTaskState> {
         priority.isEmpty;
   }
 
+  bool _hasNotTaskChanges(TaskModel taskModel, String title, String description, String priority, DateTime dateTime) {
+    var newDateTimeSeconds = dateTime.millisecondsSinceEpoch ~/ 1000;
+    return taskModel.title == title && taskModel.priority == priority && taskModel.dueBy == newDateTimeSeconds;
+  }
+
+  /// ================= EVENTS ====================
   void onAddTaskClick(String? title, String? description, String? priority, DateTime? dateTime) {
     add(AddTaskEvent(
         title: title,
@@ -94,6 +124,4 @@ class AddEditTaskBloc extends Bloc<AddEditTaskEvent, AddEditTaskState> {
       priority: priority,
       dateTime: dateTime));
   }
-
-
 }

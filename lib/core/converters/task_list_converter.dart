@@ -1,6 +1,7 @@
-import 'package:flutter_task_manager/data/converters/converters.dart';
 import 'package:flutter_task_manager/data/remote/remote.dart';
-import 'package:flutter_task_manager/ui/models/task_model.dart';
+import 'package:flutter_task_manager/data/models/models.dart';
+
+import 'converter.dart';
 
 class TaskListConverter implements Converter<List<TaskResponse>, List<TaskModel>> {
   @override

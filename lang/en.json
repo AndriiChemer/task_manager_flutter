@@ -21,6 +21,8 @@
   "before": "before",
   "select": "Select",
   "save_event": "Save event",
-  "delete_event": "Delete event"
+  "delete_event": "Delete event",
+  "task_does_not_have_changes": "Task does not have any changes",
+  "fill_in_all_fields": "Please fill in all fields"
 
 }

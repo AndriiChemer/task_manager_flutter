@@ -15,7 +15,11 @@ class ValidationTaskFail extends AddEditTaskState {
 
 class AddedTaskSuccess extends AddEditTaskState {}
 
-class EditTaskSuccess extends AddEditTaskState {}
+class EditTaskSuccess extends AddEditTaskState {
+  final int taskId;
+
+  EditTaskSuccess({required this.taskId});
+}
 
 class AddEditTaskFail extends AddEditTaskState {
   final String message;

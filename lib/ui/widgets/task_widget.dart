@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task_manager/bloc/blocs.dart';
-import 'package:flutter_task_manager/ui/models/models.dart';
+import 'package:flutter_task_manager/data/models/models.dart';
 import 'package:flutter_task_manager/ui/screens/screens.dart';
 import 'package:flutter_task_manager/utils/utils.dart';
 

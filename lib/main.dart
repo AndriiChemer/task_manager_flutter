@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'data/local/local.dart';
 import 'ui/router/router.dart';
-import 'ui/theme/theme_data.dart';
+import 'core/theme/theme_data.dart';
 import 'utils/utils.dart';
 
 void main() async {
