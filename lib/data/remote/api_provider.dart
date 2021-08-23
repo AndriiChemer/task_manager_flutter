@@ -55,8 +55,8 @@ class ApiProvider implements Api {
 
   /// ==================TASK API========================
   @override
-  Future<Response> getTaskList(String token, String sortType, String orderBy) async { // sortType = title, orderBy = asc
-    var query = "$GET_TASK_LIST?sort=$sortType%20$orderBy";
+  Future<Response> getTaskList(String token, String sortType, String orderBy) async {
+    var query = "$GET_TASK_LIST?sort=${sortType.toLowerCase()}%20${orderBy.toLowerCase()}";
     options.headers?["Authorization"] = "Bearer $token";
     return await dio.get(query, options: options);
   }

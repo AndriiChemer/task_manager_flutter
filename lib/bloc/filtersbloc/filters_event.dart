@@ -5,14 +5,14 @@ abstract class FiltersEvent {}
 
 class LoadFiltersEvent extends FiltersEvent {}
 
-class SetFilterEvent extends FiltersEvent {
-  final String filterType;
+class SetSortByEvent extends FiltersEvent {
+  final String sortBy;
 
-  SetFilterEvent(this.filterType);
+  SetSortByEvent(this.sortBy);
 }
 
-class SetSortEvent extends FiltersEvent {
-  final String sortType;
+class SetOrderByEvent extends FiltersEvent {
+  final String orderBy;
 
-  SetSortEvent(this.sortType);
+  SetOrderByEvent(this.orderBy);
 }

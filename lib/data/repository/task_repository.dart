@@ -7,9 +7,11 @@ class TaskRepository with ErrorHandler {
 
   TaskRepository({required this.api});
 
-  Future<TaskListResponse> getTaskList(String sortType, String orderBy) async {
+  Future<TaskListResponse> getTaskList() async {
     try {
       final String token = await AuthPreferences.getToken();
+      final String sortType = await FiltersPreferences.getSortByType();
+      final String orderBy = await FiltersPreferences.getOrderByType();
       final response = await api.getTaskList(token, sortType, orderBy);
 
       return TaskListResponse.fromJson(response.data);

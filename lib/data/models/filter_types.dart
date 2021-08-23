@@ -1,11 +1,11 @@
 class FilterTypes {
-  static const List<String> filter = <String>[
+  static const List<String> sortBy = <String>[
     "Title",
     "Priority",
     "Date",
   ];
 
-  static const List<String> sort = <String>[
+  static const List<String> orderBy = <String>[
     "ASC",
     "DESC",
   ];

@@ -1,10 +1,10 @@
 import 'filter_types.dart';
 
 class FiltersModel {
-  final String filterBy;
   final String sortBy;
-  final List<String> filterByItems = FilterTypes.filter;
-  final List<String> sortByItems = FilterTypes.sort;
+  final String orderBy;
+  final List<String> sortByItems = FilterTypes.sortBy;
+  final List<String> orderByItems = FilterTypes.orderBy;
 
-  FiltersModel({required this.filterBy, required this.sortBy});
+  FiltersModel({required this.sortBy, required this.orderBy});
 }

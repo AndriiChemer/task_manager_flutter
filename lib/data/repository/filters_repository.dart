@@ -1,19 +1,19 @@
 import 'package:flutter_task_manager/data/local/local.dart';
 
 class FiltersRepository {
-  Future<String> getFilterType() {
-    return FiltersPreferences.getFilterType();
+  Future<String> getSortByType() {
+    return FiltersPreferences.getSortByType();
   }
 
-  Future<String> getSortingType() {
-    return FiltersPreferences.getSortType();
+  Future<String> getOrderByType() {
+    return FiltersPreferences.getOrderByType();
   }
 
-  Future<void> setFilterType(String filterType) async {
-    await FiltersPreferences.setFilterType(filterType);
+  Future<void> setSortByType(String filterType) async {
+    await FiltersPreferences.setSortByType(filterType);
   }
 
-  Future<void> setSortingType(String sortType) async {
-    await FiltersPreferences.setSortType(sortType);
+  Future<void> setOrderByType(String sortType) async {
+    await FiltersPreferences.setOrderByType(sortType);
   }
 }

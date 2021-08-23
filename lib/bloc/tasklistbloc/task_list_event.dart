@@ -1,24 +1,11 @@
 part of 'task_list_bloc.dart';
 
 @immutable
-abstract class TaskListEvent {
-  final String sortType;
-  final String orderBy;
+abstract class TaskListEvent {}
 
-  TaskListEvent({
-    this.sortType = "",
-    this.orderBy = ""});
-}
+class GetTaskListEvent extends TaskListEvent {}
 
-class GetTaskListEvent extends TaskListEvent {
-  GetTaskListEvent(String sortType, String orderBy)
-      : super(sortType: sortType, orderBy: orderBy);
-}
-
-class RefreshTaskListEvent extends TaskListEvent {
-  RefreshTaskListEvent(String sortType, String orderBy)
-      : super(sortType: sortType, orderBy: orderBy);
-}
+class RefreshTaskListEvent extends TaskListEvent {}
 
 class DeleteTaskEvent extends TaskListEvent {
   final TaskModel taskModel;
@@ -34,9 +21,7 @@ class LoadMoreTaskListEvent extends TaskListEvent {
   LoadMoreTaskListEvent({
     required this.currentPage,
     required this.count,
-    required this.limit,
-    required String sortType,
-    required String orderBy}) : super(sortType: sortType, orderBy: orderBy);
+    required this.limit});
 }
 
 class AddNewTaskEvent extends TaskListEvent {

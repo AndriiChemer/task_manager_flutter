@@ -51,15 +51,13 @@ class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
     try {
       if(event is GetTaskListEvent) {
         yield TaskListLoadingState(
-            taskList: tasks ,
+            taskList: tasks,
             currentPage: currentPage,
             limit: limit,
             count: count);
       }
 
-      var sortType = event.sortType;
-      var orderBy = event.orderBy;
-      var taskListResponse = await taskRepository.getTaskList(sortType, orderBy);
+      var taskListResponse = await taskRepository.getTaskList();
 
       tasks = taskListConverter.convert(taskListResponse.tasks) as List<TaskModel>;
       currentPage = taskListResponse.meta.current;
@@ -170,21 +168,15 @@ class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
 
   /// =============== Events =================
   void getTasks() {
-    var sortBy = "title";
-    var orderBy = "asc";
-    add(GetTaskListEvent(sortBy, orderBy));
+    add(GetTaskListEvent());
   }
 
   void loadMore() {
-    var sortBy = "title";
-    var orderBy = "asc";
     var currentPage = state.currentPage;
     var limit = state.limit;
     var count = state.limit;
 
     add(LoadMoreTaskListEvent(
-      sortType: sortBy,
-      orderBy: orderBy,
       currentPage: currentPage,
       limit: limit,
       count: count
@@ -192,9 +184,7 @@ class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
   }
 
   void onRefresh() {
-    var sortBy = "title";
-    var orderBy = "asc";
-    add(RefreshTaskListEvent(sortBy, orderBy));
+    add(RefreshTaskListEvent());
   }
 
   void onDeleteTask(TaskModel? taskModel) {

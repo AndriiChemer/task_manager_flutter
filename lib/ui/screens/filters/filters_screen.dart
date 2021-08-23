@@ -26,8 +26,8 @@ class FilterScreen extends StatelessWidget {
 
                   FilterPopupItem(
                       icon: Icon(Icons.sort, size: 30,),
-                      text:filterModel.filterBy,
-                      items: filterModel.filterByItems,
+                      text:filterModel.sortBy,
+                      items: filterModel.sortByItems,
                       onItemSelected: onFilterTypeSelected
                   ),
 
@@ -36,8 +36,8 @@ class FilterScreen extends StatelessWidget {
                           quarterTurns: 1,
                           child: Icon(Icons.compare_arrows, size: 30,)
                       ),
-                      text: filterModel.sortBy,
-                      items: filterModel.sortByItems,
+                      text: filterModel.orderBy,
+                      items: filterModel.orderByItems,
                       onItemSelected: onSortingTypeSelected
                   ),
 
@@ -53,11 +53,11 @@ class FilterScreen extends StatelessWidget {
   }
 
   void onFilterTypeSelected(BuildContext context, String value) {
-    BlocProvider.of<FiltersBloc>(context).onFilterTypeSelect(value);
+    BlocProvider.of<FiltersBloc>(context).onSortBySelect(value);
   }
 
   void onSortingTypeSelected(BuildContext context, String value) {
-    BlocProvider.of<FiltersBloc>(context).onSortTypeSelect(value);
+    BlocProvider.of<FiltersBloc>(context).onOrderBySelect(value);
   }
 }
 

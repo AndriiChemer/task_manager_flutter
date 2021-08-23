@@ -2,8 +2,8 @@ import 'package:flutter_task_manager/data/models/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FiltersPreferences {
-  static const String _FILTER_KEY = "filter_key";
-  static const String _SORT_KEY = "sort_key";
+  static const String _SORT_BY_KEY = "sort_by_key";
+  static const String _ORDER_BY_KEY = "order_by_key";
 
   static late SharedPreferences _prefs;
 
@@ -12,25 +12,25 @@ class FiltersPreferences {
     return _prefs;
   }
 
-  static Future<bool> setFilterType(String token) async =>
-      await _prefs.setString(_FILTER_KEY, token);
+  static Future<bool> setSortByType(String token) async =>
+      await _prefs.setString(_SORT_BY_KEY, token);
 
-  static Future<String> getFilterType() async {
-    var filterType = _prefs.getString(_FILTER_KEY);
+  static Future<String> getSortByType() async {
+    var filterType = _prefs.getString(_SORT_BY_KEY);
 
-    if(filterType == null) return FilterTypes.filter[0];
+    if(filterType == null) return FilterTypes.sortBy[0];
 
     return filterType;
   }
 
 
-  static Future<bool> setSortType(String token) async =>
-      await _prefs.setString(_SORT_KEY, token);
+  static Future<bool> setOrderByType(String value) async =>
+      await _prefs.setString(_ORDER_BY_KEY, value);
 
-  static Future<String> getSortType() async {
-    var sortType = _prefs.getString(_SORT_KEY);
+  static Future<String> getOrderByType() async {
+    var sortType = _prefs.getString(_ORDER_BY_KEY);
 
-    if(sortType == null) return FilterTypes.sort[0];
+    if(sortType == null) return FilterTypes.orderBy[0];
 
     return sortType;
   }

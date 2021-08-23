@@ -24,42 +24,42 @@ class FiltersBloc extends Bloc<FiltersEvent, FiltersState> {
       yield* _mapLoadingFilterState();
     }
 
-    if(event is SetFilterEvent) {
-      yield* _mapSettingFilterState(event);
+    if(event is SetSortByEvent) {
+      yield* _mapSortByState(event);
     }
 
-    if(event is SetSortEvent) {
-      yield* _mapSettingSortState(event);
+    if(event is SetOrderByEvent) {
+      yield* _mapOrderByState(event);
     }
   }
 
   Stream<FiltersState> _mapLoadingFilterState() async* {
-    var filterType = await filtersRepository.getFilterType();
-    var sortType = await filtersRepository.getSortingType();
-    var filterModel = FiltersModel(filterBy: filterType, sortBy: sortType);
+    var filterType = await filtersRepository.getSortByType();
+    var orderBy = await filtersRepository.getOrderByType();
+    var filterModel = FiltersModel(sortBy: filterType, orderBy: orderBy);
 
     yield FiltersLoaded(filtersModel: filterModel);
   }
 
-  Stream<FiltersState> _mapSettingFilterState(SetFilterEvent event) async* {
-    var filterBy = event.filterType;
-    await filtersRepository.setFilterType(filterBy);
+  Stream<FiltersState> _mapSortByState(SetSortByEvent event) async* {
+    var sortBy = event.sortBy;
+    await filtersRepository.setSortByType(sortBy);
 
     yield* _mapLoadingFilterState();
   }
 
-  Stream<FiltersState> _mapSettingSortState(SetSortEvent event) async* {
-    var filterBy = event.sortType;
-    await filtersRepository.setSortingType(filterBy);
+  Stream<FiltersState> _mapOrderByState(SetOrderByEvent event) async* {
+    var orderBy = event.orderBy;
+    await filtersRepository.setOrderByType(orderBy);
 
     yield* _mapLoadingFilterState();
   }
 
-  void onFilterTypeSelect(String value) {
-    add(SetFilterEvent(value));
+  void onSortBySelect(String value) {
+    add(SetSortByEvent(value));
   }
 
-  void onSortTypeSelect(String value) {
-    add(SetSortEvent(value));
+  void onOrderBySelect(String value) {
+    add(SetOrderByEvent(value));
   }
 }
