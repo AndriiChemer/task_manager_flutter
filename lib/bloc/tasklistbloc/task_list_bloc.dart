@@ -6,19 +6,19 @@ import 'package:flutter_task_manager/data/repository/repository.dart';
 import 'package:flutter_task_manager/data/models/models.dart';
 import 'package:meta/meta.dart';
 
-part 'tasks_event.dart';
-part 'tasks_state.dart';
+part 'task_list_event.dart';
+part 'task_list_state.dart';
 
-class TasksBloc extends Bloc<TasksEvent, TasksState> {
+class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
 
   final TaskRepository taskRepository;
   final Converter taskListConverter;
 
-  TasksBloc({required this.taskRepository, required this.taskListConverter}) : super(TasksInitial());
+  TaskListBloc({required this.taskRepository, required this.taskListConverter}) : super(TasksInitial());
 
   @override
-  Stream<TasksState> mapEventToState(
-    TasksEvent event,
+  Stream<TaskListState> mapEventToState(
+    TaskListEvent event,
   ) async* {
     if(event is GetTaskListEvent || event is RefreshTaskListEvent) {
       yield* _mapGettingTaskListState(event);
@@ -41,7 +41,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     }
   }
 
-  Stream<TasksState> _mapGettingTaskListState(TasksEvent event) async* {
+  Stream<TaskListState> _mapGettingTaskListState(TaskListEvent event) async* {
     int currentPage = -1;
     int limit = 0;
     int count = 0;
@@ -81,7 +81,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     }
   }
 
-  Stream<TasksState> _mapLoadMoreState(LoadMoreTaskListEvent event) async* {
+  Stream<TaskListState> _mapLoadMoreState(LoadMoreTaskListEvent event) async* {
     var nextPage = event.currentPage + 1;
 
     // if(totalPage >= nextPage) {
@@ -98,7 +98,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     // }
   }
 
-  Stream<TasksState> _mapDeleteTaskState(DeleteTaskEvent event) async* {
+  Stream<TaskListState> _mapDeleteTaskState(DeleteTaskEvent event) async* {
     List<TaskModel> tasks = state.taskList;
     int currentPage = state.currentPage;
     int limit = state.limit;
@@ -133,7 +133,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     }
   }
 
-  Stream<TasksState> _mapAddNewTaskState(AddNewTaskEvent event) async* {
+  Stream<TaskListState> _mapAddNewTaskState(AddNewTaskEvent event) async* {
     var taskModel = event.taskModel;
     var taskList = state.taskList;
     taskList.add(taskModel);
@@ -147,7 +147,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         count: state.count);
   }
 
-  Stream<TasksState> _mapUpdateTaskState(UpdateTaskEvent event) async* {
+  Stream<TaskListState> _mapUpdateTaskState(UpdateTaskEvent event) async* {
     var taskModel = event.taskModel;
     var taskList = state.taskList;
 
@@ -196,8 +196,10 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     add(RefreshTaskListEvent(sortBy, orderBy));
   }
 
-  void onDeleteTask(TaskModel taskModel) {
-    add(DeleteTaskEvent(taskModel: taskModel));
+  void onDeleteTask(TaskModel? taskModel) {
+    if(taskModel != null) {
+      add(DeleteTaskEvent(taskModel: taskModel));
+    }
   }
 
   void updateTask(TaskModel taskModel) {

@@ -17,6 +17,17 @@ class TaskRepository with ErrorHandler {
       throw getErrorMessage(error);
     }
   }
+  
+  Future<TaskResponse> getTaskById(int taskId) async {
+    try {
+      final String token = await AuthPreferences.getToken();
+      final response = await api.getTaskById(taskId, token);
+
+      return TaskResponse.fromJson(response.data['task']);
+    } catch(error) {
+      throw getErrorMessage(error);
+    }
+  }
 
   Future<int> deleteTaskById(int id) async {
     try {

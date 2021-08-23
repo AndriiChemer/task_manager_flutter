@@ -27,7 +27,6 @@ class _SelectDateTimeWidgetState extends State<SelectDateTimeWidget> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     var textColor = Theme

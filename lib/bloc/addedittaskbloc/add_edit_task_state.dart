@@ -16,9 +16,9 @@ class ValidationTaskFail extends AddEditTaskState {
 class AddedTaskSuccess extends AddEditTaskState {}
 
 class EditTaskSuccess extends AddEditTaskState {
-  final int taskId;
+  final TaskModel taskModel;
 
-  EditTaskSuccess({required this.taskId});
+  EditTaskSuccess({required this.taskModel});
 }
 
 class AddEditTaskFail extends AddEditTaskState {

@@ -13,7 +13,7 @@ class AppRouter {
   late TaskRepository _taskRepository;
   late UserRepository _userRepository;
 
-  late TasksBloc _tasksBloc;
+  late TaskListBloc _tasksBloc;
   late AddEditTaskBloc _addEditTaskBloc;
 
   final AuthNotifier authNotifier = AuthNotifier();
@@ -24,7 +24,7 @@ class AppRouter {
     _userRepository = UserRepository(api: _api);
     _taskRepository = TaskRepository(api: _api);
 
-    _tasksBloc = TasksBloc(taskRepository: _taskRepository, taskListConverter: TaskListConverter());
+    _tasksBloc = TaskListBloc(taskRepository: _taskRepository, taskListConverter: TaskListConverter());
     _addEditTaskBloc = AddEditTaskBloc(tasksBloc: _tasksBloc, taskRepository: _taskRepository, taskConverter: TaskConverter(),);
   }
 

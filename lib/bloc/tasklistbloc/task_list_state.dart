@@ -1,20 +1,20 @@
-part of 'tasks_bloc.dart';
+part of 'task_list_bloc.dart';
 
 @immutable
-abstract class TasksState {
+abstract class TaskListState {
   final List<TaskModel> taskList;
   final int currentPage;
   final int limit;
   final int count;
 
-  TasksState([this.taskList = const [], this.currentPage = 0, this.limit = 0, this.count = 0]);
+  TaskListState([this.taskList = const [], this.currentPage = 0, this.limit = 0, this.count = 0]);
 }
 
-class TasksInitial extends TasksState {
+class TasksInitial extends TaskListState {
   TasksInitial() : super();
 }
 
-class TaskListLoadedSuccessState extends TasksState {
+class TaskListLoadedSuccessState extends TaskListState {
 
   TaskListLoadedSuccessState({
     required List<TaskModel> taskList,
@@ -24,7 +24,7 @@ class TaskListLoadedSuccessState extends TasksState {
 
 }
 
-class TaskListLoadFailState extends TasksState {
+class TaskListLoadFailState extends TaskListState {
   final String message;
 
   TaskListLoadFailState({
@@ -37,7 +37,7 @@ class TaskListLoadFailState extends TasksState {
 }
 
 /// ============ Loading states ==================
-class TaskListLoadingState extends TasksState {
+class TaskListLoadingState extends TaskListState {
   
   TaskListLoadingState({
     required List<TaskModel> taskList,
@@ -46,6 +46,6 @@ class TaskListLoadingState extends TasksState {
     required int count}): super(taskList, currentPage, limit, count);
 }
 
-class TaskListLoadingMoreState extends TasksState {}
+class TaskListLoadingMoreState extends TaskListState {}
 
-class TaskListPaginationLoadingState extends TasksState {}
+class TaskListPaginationLoadingState extends TaskListState {}

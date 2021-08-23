@@ -12,7 +12,7 @@ part 'add_edit_task_event.dart';
 part 'add_edit_task_state.dart';
 
 class AddEditTaskBloc extends Bloc<AddEditTaskEvent, AddEditTaskState> {
-  final TasksBloc tasksBloc;
+  final TaskListBloc tasksBloc;
   final Converter taskConverter;
   final TaskRepository taskRepository;
 
@@ -87,8 +87,11 @@ class AddEditTaskBloc extends Bloc<AddEditTaskEvent, AddEditTaskState> {
       var taskId = taskModel.id;
 
       await taskRepository.updateTask(taskId, title, description, priority, dateTimeMilliseconds);
+      TaskResponse taskResponse = await taskRepository.getTaskById(taskId);
+      TaskModel newTaskModel = taskConverter.convert(taskResponse);
+      tasksBloc.updateTask(newTaskModel);
 
-      yield EditTaskSuccess(taskId: taskId);
+      yield EditTaskSuccess(taskModel: newTaskModel);
     } catch(error) {
       yield AddEditTaskFail(message: error.toString());
     }

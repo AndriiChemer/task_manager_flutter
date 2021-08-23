@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task_manager/bloc/blocs.dart';
+import 'package:flutter_task_manager/core/converters/converters.dart';
 import 'package:flutter_task_manager/data/models/models.dart';
 import 'package:flutter_task_manager/ui/screens/screens.dart';
 import 'package:flutter_task_manager/utils/utils.dart';
@@ -93,23 +94,19 @@ class TaskWidget extends StatelessWidget {
   }
 
   void _openDetailScreen(BuildContext context) {
-    var tasksBloc = BlocProvider.of<TasksBloc>(context);
+    var taskListBloc = BlocProvider.of<TaskListBloc>(context);
     var addEditTaskBloc = BlocProvider.of<AddEditTaskBloc>(context);
     var detailsScreen = TaskDetailsScreen(taskModel: taskModel);
+    var taskBloc = TaskBloc();
 
     var provides = MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: tasksBloc),
+        BlocProvider.value(value: taskBloc),
+        BlocProvider.value(value: taskListBloc),
         BlocProvider.value(value: addEditTaskBloc),
       ],
       child: detailsScreen,
     );
-
-    //TODO remove
-    // var provider = BlocProvider.value(
-    //   value: tasksBloc,
-    //   child: detailsScreen,
-    // );
 
     Navigator.push(
       context,

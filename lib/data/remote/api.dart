@@ -15,5 +15,5 @@ abstract class Api {
 
   Future<Response> updateTask(int taskId, String token, TaskRequest taskRequest);
 
-  Future<Response> getTaskDetails(int taskId);
+  Future<Response> getTaskById(int taskId, String token);
 }

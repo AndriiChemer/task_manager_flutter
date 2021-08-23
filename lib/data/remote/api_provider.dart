@@ -68,8 +68,9 @@ class ApiProvider implements Api {
   }
 
   @override
-  Future<Response> getTaskDetails(int taskId) async {
-    return await dio.get("$GET_TASK_DETAILS/$taskId");
+  Future<Response> getTaskById(int taskId, String token) async {
+    options.headers?["Authorization"] = "Bearer $token";
+    return await dio.get("$GET_TASK_DETAILS/$taskId", options: options);
   }
 
   @override

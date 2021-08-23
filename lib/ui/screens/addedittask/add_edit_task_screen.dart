@@ -5,7 +5,6 @@ import 'package:flutter_task_manager/bloc/blocs.dart';
 import 'package:flutter_task_manager/data/models/models.dart';
 import 'package:flutter_task_manager/ui/widgets/widgets.dart';
 import 'package:flutter_task_manager/utils/utils.dart';
-import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AddEditScreen extends StatefulWidget {
@@ -46,7 +45,6 @@ class _AddEditScreenState extends State<AddEditScreen> {
         child: BlocListener<AddEditTaskBloc, AddEditTaskState>(
           listener: (BuildContext context, state) {
             _listenAddEditState(context, state);
-
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +112,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
     } else if(state is AddedTaskSuccess) {
       Navigator.pop(context);
     } else if(state is EditTaskSuccess) {
-      Navigator.pop(context, state.taskId);
+      Navigator.pop(context, state.taskModel);
     }
   }
 
@@ -125,8 +123,6 @@ class _AddEditScreenState extends State<AddEditScreen> {
     super.dispose();
   }
 }
-
-
 
 ///=================== ELEMENTS ===================
 class AddEditAppBar extends StatelessWidget {

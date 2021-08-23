@@ -16,14 +16,14 @@ class TaskListScreen extends StatefulWidget {
 
 class _TaskListScreenState extends State<TaskListScreen> {
 
-  late TasksBloc _tasksBloc;
+  late TaskListBloc _tasksBloc;
   late ScrollController _scrollController;
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     SchedulerBinding.instance!.addPostFrameCallback((_){  _refreshIndicatorKey.currentState?.show(); } );
-    _tasksBloc = BlocProvider.of<TasksBloc>(context);
+    _tasksBloc = BlocProvider.of<TaskListBloc>(context);
     _scrollController = ScrollController()..addListener(_scrollListener);
 
     _tasksBloc.getTasks();
@@ -45,14 +45,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
             _openAuthorizationScreen();
           }
         },
-        child: BlocListener<TasksBloc, TasksState>(
+        child: BlocListener<TaskListBloc, TaskListState>(
           listener: (context, state) {
             if (state is TaskListLoadFailState) {
               context.showNegativeMessage(state.message);
             }
           },
           child: SafeArea(
-            child: BlocBuilder<TasksBloc, TasksState>(
+            child: BlocBuilder<TaskListBloc, TaskListState>(
               builder: (context, state) {
                 var task = state.taskList;
 

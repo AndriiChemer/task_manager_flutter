@@ -6,61 +6,79 @@ import 'package:flutter_task_manager/ui/screens/screens.dart';
 import 'package:flutter_task_manager/ui/widgets/widgets.dart';
 import 'package:flutter_task_manager/utils/utils.dart';
 
-class TaskDetailsScreen extends StatelessWidget {
+class TaskDetailsScreen extends StatefulWidget {
   static const String id = "/task_details";
   final TaskModel taskModel;
 
   const TaskDetailsScreen({Key? key, required this.taskModel}): super(key: key);
 
   @override
+  _TaskDetailsScreenState createState() => _TaskDetailsScreenState();
+}
+
+class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
+
+  @override
+  void initState() {
+    BlocProvider.of<TaskBloc>(context).showTaskDetails(widget.taskModel);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    return BlocBuilder<TaskBloc, TaskState>(
+      builder: (context, state) {
+        if(state is ShowTaskState) {
+          return _buildMainContent(state.taskModel);
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+
+  Widget _buildMainContent(TaskModel taskModel) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(double.infinity, 57),
-        child: AppBarDetails(taskModel: taskModel,),
-      ),
-      body: BlocListener<TasksBloc, TasksState>(
-        listener: (context, state) {
-          if(state is TaskListLoadedSuccessState) {
-            Navigator.pop(context);
-          }
-        },
-        child: SafeArea(
+        appBar: PreferredSize(
+          preferredSize: Size(double.infinity, 57),
+          child: AppBarDetails(taskModel: taskModel,),
+        ),
+        body: SafeArea(
           child: Container(
             child: Column(
               children: [
                 Expanded(
-                  child: ListView(
-                    children: [
+                    child: ListView(
+                      children: [
 
-                      Title(
-                        title: taskModel.title,
-                        dueBy: taskModel.dueBy,
-                      ),
-                      Priority(
-                        priority: taskModel.priority,
-                      ),
-                      Divider(),
-                      Description(
-                        description: '-',
-                      ),
-                      Divider(),
-                      NotificationTime(
-                        dueBy: taskModel.dueBy,
-                      ),
-                      Divider(),
-                    ],
-                  )
+                        Title(
+                          title: taskModel.title,
+                          dueBy: taskModel.dueBy,
+                        ),
+                        Priority(
+                          priority: taskModel.priority,
+                        ),
+                        Divider(),
+                        Description(
+                          description: '-',
+                        ),
+                        Divider(),
+                        NotificationTime(
+                          dueBy: taskModel.dueBy,
+                        ),
+                        Divider(),
+                      ],
+                    )
                 ),
 
                 DeleteButton(taskModel: taskModel),
               ],
             ),
           ),
-        ),
-      )
+        )
     );
   }
+
 }
 
 /// ================ ELEMENTS ===================
@@ -100,28 +118,26 @@ class AppBarDetails extends StatelessWidget {
     );
   }
 
-  void _openEditTaskScreen(BuildContext context) {
-    var tasksBloc = BlocProvider.of<TasksBloc>(context);
+  void _openEditTaskScreen(BuildContext context) async {
+    var taskBloc = BlocProvider.of<TaskBloc>(context);
+    var taskListBloc = BlocProvider.of<TaskListBloc>(context);
     var addEditTaskBloc = BlocProvider.of<AddEditTaskBloc>(context);
     var editTaskScreen = AddEditScreen(taskModer: taskModel);
 
     var provides = MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: tasksBloc),
+        BlocProvider.value(value: taskListBloc),
         BlocProvider.value(value: addEditTaskBloc),
       ],
       child: editTaskScreen,
     );
 
-    // var provider = BlocProvider.value(
-    //   value: tasksBloc,
-    //   child: editTaskScreen,
-    // );
-
-    Navigator.push(
+    var updatedTaskModel = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => provides),
     );
+
+    taskBloc.showTaskDetails(updatedTaskModel);
   }
 }
 
@@ -242,13 +258,13 @@ class NotificationTime extends StatelessWidget {
 }
 
 class DeleteButton extends StatelessWidget {
-  final TaskModel taskModel;
+  final TaskModel? taskModel;
 
-  const DeleteButton({Key? key, required this.taskModel}) : super(key: key);
+  const DeleteButton({Key? key, this.taskModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TasksBloc, TasksState>(
+    return BlocBuilder<TaskListBloc, TaskListState>(
       builder: (context, state) {
         var isLoading = state is TaskListLoadingState;
 
@@ -267,7 +283,7 @@ class DeleteButton extends StatelessWidget {
   }
 
   void _onDeleteButtonClick(BuildContext context) {
-    BlocProvider.of<TasksBloc>(context).onDeleteTask(taskModel);
+    BlocProvider.of<TaskListBloc>(context).onDeleteTask(taskModel);
   }
 }
 
