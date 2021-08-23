@@ -14,7 +14,7 @@ const String GET_TASK_DETAILS = GET_TASK_LIST;
 const String DELETE_TASK = GET_TASK_LIST;
 const String UPDATE_TASK = GET_TASK_LIST;
 
-class ApiProvider implements Api {
+class ApiProvider extends Api {
   static final dio = Dio();
 
   var options = Options(
@@ -45,7 +45,7 @@ class ApiProvider implements Api {
   /// ==================USER API========================
   @override
   Future<Response> createUser(UserRequest userRequest) async {
-    return await dio.post(CREATE_USER, options: options, data: userRequest.toJson());
+    return dio.post(CREATE_USER, options: options, data: userRequest.toJson());
   }
 
   @override

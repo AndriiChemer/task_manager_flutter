@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_task_manager/data/local/local.dart';
 import 'package:flutter_task_manager/data/remote/remote.dart';
 import 'package:flutter_task_manager/data/repository/repository.dart';
