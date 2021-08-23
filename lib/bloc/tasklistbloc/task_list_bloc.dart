@@ -12,9 +12,10 @@ part 'task_list_state.dart';
 class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
 
   final TaskRepository taskRepository;
+  final FiltersRepository filtersRepository;
   final Converter taskListConverter;
 
-  TaskListBloc({required this.taskRepository, required this.taskListConverter}) : super(TasksInitial());
+  TaskListBloc({required this.taskRepository, required this.filtersRepository, required this.taskListConverter}) : super(TasksInitial());
 
   @override
   Stream<TaskListState> mapEventToState(

@@ -97,7 +97,7 @@ class TaskWidget extends StatelessWidget {
     var taskListBloc = BlocProvider.of<TaskListBloc>(context);
     var addEditTaskBloc = BlocProvider.of<AddEditTaskBloc>(context);
     var detailsScreen = TaskDetailsScreen(taskModel: taskModel);
-    var taskBloc = TaskBloc();
+    var taskBloc = ShowTaskBloc();
 
     var provides = MultiBlocProvider(
       providers: [

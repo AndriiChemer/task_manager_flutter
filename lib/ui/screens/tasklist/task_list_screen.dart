@@ -115,7 +115,7 @@ class AppBarTaskList extends StatelessWidget {
       action: IconButton(
         icon: Icon(Icons.sort, size: 26,),
         onPressed: () {
-          context.showFeatureNotImplemented();
+          _onOpenFilterScreenClick(context);
         },
       ),
       leading: IconButton(
@@ -125,6 +125,10 @@ class AppBarTaskList extends StatelessWidget {
         },
       ),
     );
+  }
+  
+  _onOpenFilterScreenClick(BuildContext context) {
+    Navigator.pushNamed(context, FilterScreen.id);
   }
 }
 

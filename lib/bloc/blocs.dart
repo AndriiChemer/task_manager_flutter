@@ -5,4 +5,5 @@ export 'authbloc/auth_bloc.dart';
 export 'tasklistbloc/task_list_bloc.dart';
 export 'authstayloggedincubit/auth_stay_logged_in_cubit.dart';
 export 'addedittaskbloc/add_edit_task_bloc.dart';
-export 'taskbloc/task_bloc.dart';
+export 'showtaskbloc/show_task_bloc.dart';
+export 'filtersbloc/filters_bloc.dart';

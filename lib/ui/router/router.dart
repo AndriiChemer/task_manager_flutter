@@ -12,8 +12,10 @@ class AppRouter {
   late Api _api;
   late TaskRepository _taskRepository;
   late UserRepository _userRepository;
+  late FiltersRepository _filtersRepository;
 
   late TaskListBloc _tasksBloc;
+  late FiltersBloc _filtersBloc;
   late AddEditTaskBloc _addEditTaskBloc;
 
   final AuthNotifier authNotifier = AuthNotifier();
@@ -23,9 +25,11 @@ class AppRouter {
     
     _userRepository = UserRepository(api: _api);
     _taskRepository = TaskRepository(api: _api);
+    _filtersRepository = FiltersRepository();
 
-    _tasksBloc = TaskListBloc(taskRepository: _taskRepository, taskListConverter: TaskListConverter());
+    _tasksBloc = TaskListBloc(taskRepository: _taskRepository, taskListConverter: TaskListConverter(), filtersRepository: _filtersRepository);
     _addEditTaskBloc = AddEditTaskBloc(tasksBloc: _tasksBloc, taskRepository: _taskRepository, taskConverter: TaskConverter(),);
+    _filtersBloc = FiltersBloc(filtersRepository: _filtersRepository);
   }
 
   Route generateRoute(RouteSettings settings) {
@@ -36,6 +40,8 @@ class AppRouter {
         return _getTaskListScreen();
       case AddEditScreen.id:
         return _getAddEditScreen();
+      case FilterScreen.id:
+        return _getFilterScreen();
       default:
         return _getTaskListScreen();
     }
@@ -71,6 +77,18 @@ class AppRouter {
             BlocProvider(create: (_) => AuthBloc(userRepository: _userRepository))
           ],
           child: LoginRegistrationScreen(),
+        )
+    );
+  }
+
+  MaterialPageRoute _getFilterScreen() {
+    return MaterialPageRoute(
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: _filtersBloc,),
+            // BlocProvider(create: (_) => _filtersBloc),
+          ],
+          child: FilterScreen(),
         )
     );
   }

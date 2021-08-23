@@ -4,16 +4,16 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_task_manager/data/models/models.dart';
 import 'package:meta/meta.dart';
 
-part 'task_event.dart';
-part 'task_state.dart';
+part 'show_task_event.dart';
+part 'show_task_state.dart';
 
-class TaskBloc extends Bloc<TaskEvent, TaskState> {
+class ShowTaskBloc extends Bloc<ShowTaskEvent, TaskState> {
 
-  TaskBloc() : super(TaskInitial());
+  ShowTaskBloc() : super(TaskInitial());
 
   @override
   Stream<TaskState> mapEventToState(
-    TaskEvent event,
+      ShowTaskEvent event,
   ) async* {
     if(event is ShowTaskEvent) {
       yield ShowTaskState(taskModel: event.taskModel);

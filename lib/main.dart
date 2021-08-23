@@ -8,6 +8,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await AuthPreferences.init();
+  await FiltersPreferences.init();
 
   runApp(TaskManager(
     router: AppRouter(),

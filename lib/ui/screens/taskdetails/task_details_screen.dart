@@ -20,13 +20,13 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
 
   @override
   void initState() {
-    BlocProvider.of<TaskBloc>(context).showTaskDetails(widget.taskModel);
+    BlocProvider.of<ShowTaskBloc>(context).showTaskDetails(widget.taskModel);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TaskBloc, TaskState>(
+    return BlocBuilder<ShowTaskBloc, TaskState>(
       builder: (context, state) {
         if(state is ShowTaskState) {
           return _buildMainContent(state.taskModel);
@@ -119,7 +119,7 @@ class AppBarDetails extends StatelessWidget {
   }
 
   void _openEditTaskScreen(BuildContext context) async {
-    var taskBloc = BlocProvider.of<TaskBloc>(context);
+    var taskBloc = BlocProvider.of<ShowTaskBloc>(context);
     var taskListBloc = BlocProvider.of<TaskListBloc>(context);
     var addEditTaskBloc = BlocProvider.of<AddEditTaskBloc>(context);
     var editTaskScreen = AddEditScreen(taskModer: taskModel);
