@@ -4,6 +4,7 @@ class ColorConstants {
   static Color lightScaffoldBackgroundColor = hexToColor('#ffffff');
   static Color secondaryAppColor = hexToColor('#E5E4E5');
   static Color darkGray = hexToColor('#7C7C7C');
+  static Color buttonColorLight = hexToColor('#F8F8F8');
 }
 
 Color hexToColor(String hex) {

@@ -87,6 +87,8 @@ class _RegistrationFormPageState extends State<RegistrationFormPage> {
           var isLoading = state is LoadingState;
 
           return ButtonWidget(
+            textColor: Colors.white,
+            buttonColor: Theme.of(context).iconTheme.color,
             isLoading: isLoading,
             title: context.getString("registration_button"),
             onPressed: () {

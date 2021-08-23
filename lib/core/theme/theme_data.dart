@@ -6,6 +6,7 @@ import 'theme.dart';
 class ThemeConfig {
   static ThemeData createTheme({
     required Brightness brightness,
+    required Color buttonColor,
     required Color iconColor,
     required Color background,
     required Color primaryText,
@@ -23,8 +24,6 @@ class ThemeConfig {
         : Typography.whiteMountainView;
 
     return ThemeData(
-
-
       brightness: brightness,
       buttonColor: buttonBackground,
       canvasColor: background,
@@ -73,8 +72,15 @@ class ThemeConfig {
       ),
 
       errorColor: error,
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          primary: buttonColor,// background
+          onPrimary: iconColor,
+        )
+      ),
       buttonTheme: ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
+        buttonColor: buttonColor,
         colorScheme: ColorScheme(
           brightness: brightness,
           primary: accentColor,
@@ -187,6 +193,7 @@ class ThemeConfig {
 
   static ThemeData get lightTheme => createTheme(
     iconColor: ColorConstants.darkGray,
+    buttonColor: ColorConstants.buttonColorLight,
     brightness: Brightness.light,
     background: ColorConstants.lightScaffoldBackgroundColor,
     cardBackground: ColorConstants.secondaryAppColor,
