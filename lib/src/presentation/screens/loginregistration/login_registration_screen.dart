@@ -27,7 +27,7 @@ class LoginRegistrationScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.only(left: 40, right: 40,),
-              child: BlocBuilder<LoginRegistrationBloc, LoginRegistrationState>(
+              child: BlocBuilder<CredentialTypeCubit, CredentialTypeState>(
                   builder: (context, state) {
                     if (state is LoginState) {
                       return _buildLoginForm();

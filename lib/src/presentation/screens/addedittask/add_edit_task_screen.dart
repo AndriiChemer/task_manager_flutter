@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_task_manager/data/models/models.dart';
+import 'package:flutter_task_manager/src/data/models/task/task_model.dart';
 import 'package:flutter_task_manager/src/presentation/blocs/blocs.dart';
 import 'package:flutter_task_manager/src/presentation/widgets/widgets.dart';
 import 'package:flutter_task_manager/utils/utils.dart';
@@ -9,11 +9,11 @@ import 'package:rxdart/rxdart.dart';
 class AddEditScreen extends StatefulWidget {
   static const String id = "/add_edit_screen";
 
-  final TaskModel? taskModer;
+  final TaskModel? taskModel;
 
-  const AddEditScreen({Key? key, this.taskModer}) : super(key: key);
+  const AddEditScreen({Key? key, this.taskModel}) : super(key: key);
 
-  bool get isAddTaskScreen => taskModer == null;
+  bool get isAddTaskScreen => taskModel == null;
 
   @override
   _AddEditScreenState createState() => _AddEditScreenState();
@@ -28,7 +28,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
 
   @override
   void initState() {
-    titleController.text = widget.taskModer != null ? widget.taskModer!.title : "";
+    titleController.text = widget.taskModel != null ? widget.taskModel!.title : "";
     descriptionController.text = '';
     super.initState();
   }
@@ -42,9 +42,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
       ),
       body: SafeArea(
         child: BlocListener<AddEditTaskBloc, AddEditTaskState>(
-          listener: (BuildContext context, state) {
-            _listenAddEditState(context, state);
-          },
+          listener: _listenAddEditState,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -59,14 +57,14 @@ class _AddEditScreenState extends State<AddEditScreen> {
                     TitleWidget(title: context.getString("priority"),),
                     PriorityContainer(
                       toggleButtonController: toggleButtonController,
-                      priority: widget.taskModer?.priority,),
+                      priority: widget.taskModel?.priority,),
                     Divider(),
 
                     TitleWidget(title: context.getString("description"),),
                     DescriptionInputText(descriptionController: descriptionController,),
                     Divider(),
 
-                    NotificationTimeContainer(controller: dateTimeController, initialTimeStamp: widget.taskModer?.dueBy,),
+                    NotificationTimeContainer(controller: dateTimeController, initialTimeStamp: widget.taskModel?.dueBy,),
                     Divider(),
                   ],
                 )
@@ -86,19 +84,26 @@ class _AddEditScreenState extends State<AddEditScreen> {
 
   void _onSaveButtonClick() async {
     var addEditTaskBloc = BlocProvider.of<AddEditTaskBloc>(context);
-    var isAddNewTaskScreen = widget.taskModer == null;
+    var isAddNewTaskScreen = widget.taskModel == null;
 
-    var title = titleController.text;
-    var description = titleController.text;
-    var priority = toggleButtonController.hasValue ? toggleButtonController.value : null;
-    var dateTime = dateTimeController.hasValue ? dateTimeController.value : null;
-
-    print("title: $title\ndescription: $description\npriority: $priority\ndateTime: $dateTime");
+    final title = titleController.text;
+    final description = titleController.text;
+    final priority = toggleButtonController.hasValue ? toggleButtonController.value : null;
+    final dateTime = dateTimeController.hasValue ? dateTimeController.value : null;
 
     if(isAddNewTaskScreen) {
-      addEditTaskBloc.onAddTaskClick(title, description, priority, dateTime);
+      addEditTaskBloc.add(AddTaskEvent(
+          title: title,
+          description: description,
+          priority: priority,
+          dateTime: dateTime));
     } else {
-      addEditTaskBloc.onEditTaskClick(widget.taskModer!, title, description, priority, dateTime);
+      addEditTaskBloc.add(EditTaskEvent(
+          taskModel: widget.taskModel!,
+          title: title,
+          description: description,
+          priority: priority,
+          dateTime: dateTime));
     }
   }
 

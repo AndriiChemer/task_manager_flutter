@@ -12,7 +12,6 @@ class GetTaskListUseCase implements UseCase<DataState<Pair<List<TaskModel>, Pagi
   const GetTaskListUseCase(this._taskRepository);
 
   @override
-  Future<DataState<Pair<List<TaskModel>, PaginationModel>>> call({required PaginationModel params}) {
-    return _taskRepository.getTaskList();
-  }
+  Future<DataState<Pair<List<TaskModel>, PaginationModel>>> call({required PaginationModel params}) =>
+      _taskRepository.getTaskList();
 }

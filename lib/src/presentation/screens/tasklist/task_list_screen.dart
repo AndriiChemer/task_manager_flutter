@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_task_manager/data/models/models.dart';
+import 'package:flutter_task_manager/src/data/models/task/task_model.dart';
 import 'package:flutter_task_manager/src/presentation/blocs/blocs.dart';
 import 'package:flutter_task_manager/src/presentation/screens/screens.dart';
 import 'package:flutter_task_manager/src/presentation/widgets/widgets.dart';
@@ -26,7 +26,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
     _tasksBloc = BlocProvider.of<TaskListBloc>(context);
     _scrollController = ScrollController()..addListener(_scrollListener);
 
-    _tasksBloc.getTasks();
+    _tasksBloc.add(GetTaskListEvent());
 
     super.initState();
   }

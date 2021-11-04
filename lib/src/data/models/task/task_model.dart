@@ -9,7 +9,7 @@ class TaskModel with _$TaskModel  {
   const TaskModel._();
 
   factory TaskModel({
-    required int id,
+    int? id,
     required String title,
     required int dueBy,
     required String priority,

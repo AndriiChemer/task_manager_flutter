@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_task_manager/data/repository/repository.dart';
-import 'package:flutter_task_manager/data/models/models.dart';
-import 'package:flutter_task_manager/depicated/core/converters/converters.dart';
+import 'package:flutter_task_manager/src/core/resources/data_state.dart';
+import 'package:flutter_task_manager/src/data/models/pagination/pagination_model.dart';
+import 'package:flutter_task_manager/src/data/models/task/task_model.dart';
+import 'package:flutter_task_manager/src/domain/usecases/usecases.dart';
 import 'package:meta/meta.dart';
 
 part 'task_list_event.dart';
@@ -11,11 +12,17 @@ part 'task_list_state.dart';
 
 class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
 
-  final TaskRepository taskRepository;
-  final FiltersRepository filtersRepository;
-  final Converter taskListConverter;
+  GetTaskListUseCase getTaskListUseCase;
+  DeleteTaskUseCase deleteTaskUseCase;
 
-  TaskListBloc({required this.taskRepository, required this.filtersRepository, required this.taskListConverter}) : super(TasksInitial());
+  TaskListBloc({
+    required this.getTaskListUseCase,
+    required this.deleteTaskUseCase
+  }) : super(TasksInitial());
+
+  int _currentPage = -1;
+  int _limit = 0;
+  int _count = 0;
 
   @override
   Stream<TaskListState> mapEventToState(
@@ -43,127 +50,61 @@ class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
   }
 
   Stream<TaskListState> _mapGettingTaskListState(TaskListEvent event) async* {
-    int currentPage = -1;
-    int limit = 0;
-    int count = 0;
-    List<TaskModel> tasks = state.taskList;
+    if(event is GetTaskListEvent) {
+      yield TaskListLoadingState(taskList: state.taskList);
+    }
 
-    try {
-      if(event is GetTaskListEvent) {
-        yield TaskListLoadingState(
-            taskList: tasks,
-            currentPage: currentPage,
-            limit: limit,
-            count: count);
-      }
+    final dataState = await getTaskListUseCase(params: PaginationModel(count: _count, limit: _limit, current: _currentPage));
 
-      var taskListResponse = await taskRepository.getTaskList();
+    if (dataState is DataSuccess) {
+      final taskList = dataState.data!.first;
+      final paginationModel = dataState.data!.second;
 
-      tasks = taskListConverter.convert(taskListResponse.tasks) as List<TaskModel>;
-      currentPage = taskListResponse.meta.current;
-      limit = taskListResponse.meta.limit;
-      count = taskListResponse.meta.count;
+      yield TaskListLoadedSuccessState(taskList: taskList);
+    }
 
-      yield TaskListLoadedSuccessState(
-          taskList: tasks,
-          currentPage: currentPage,
-          limit: limit,
-          count: count);
-
-    } catch(error) {
-      yield TaskListLoadFailState(
-          message: error.toString(),
-          currentPage: currentPage,
-          limit: limit,
-          count: count,
-          taskList: tasks);
+    if (dataState is DataFailed) {
+      yield TaskListLoadFailState(message: dataState.error.toString());
     }
   }
 
-  Stream<TaskListState> _mapLoadMoreState(LoadMoreTaskListEvent event) async* {
-    var nextPage = event.currentPage + 1;
-
-    // if(totalPage >= nextPage) {
-    //   try {
-    //     yield TaskListPaginationLoadingState();
-    //
-    //     // var taskList = taskRepository
-    //
-    //
-    //     yield TaskListLoadedSuccessState();
-    //   } catch(error) {
-    //     yield TaskListLoadFailState(error.toString());
-    //   }
-    // }
-  }
+  Stream<TaskListState> _mapLoadMoreState(LoadMoreTaskListEvent event) async* {}
 
   Stream<TaskListState> _mapDeleteTaskState(DeleteTaskEvent event) async* {
-    List<TaskModel> tasks = state.taskList;
-    int currentPage = state.currentPage;
-    int limit = state.limit;
-    int count = state.count;
+    final taskList = state.taskList;
+    final taskId = event.taskModel.id!;
 
-    try {
-      yield TaskListLoadingState(
-          taskList: tasks ,
-          currentPage: currentPage,
-          limit: limit,
-          count: count);
+    yield TaskListLoadingState(taskList: taskList);
 
+    final dataState = await deleteTaskUseCase(params: taskId);
 
-      var taskId = event.taskModel.id;
-      var removedTaskId = await taskRepository.deleteTaskById(taskId);
-      tasks.removeWhere((item) => item.id == removedTaskId);
+    if (dataState is DataSuccess) {
+      taskList.removeWhere((item) => item.id == taskId);
+      yield TaskListLoadedSuccessState(taskList: taskList);
+    }
 
-
-      yield TaskListLoadedSuccessState(
-          taskList: tasks,
-          currentPage: currentPage,
-          limit: limit,
-          count: count);
-
-    } catch(error) {
-      yield TaskListLoadFailState(
-          message: error.toString(),
-          currentPage: currentPage,
-          limit: limit,
-          count: count,
-          taskList: tasks);
+    if (dataState is DataFailed) {
+      yield TaskListLoadFailState(message: dataState.error.toString());
     }
   }
 
   Stream<TaskListState> _mapAddNewTaskState(AddNewTaskEvent event) async* {
-    var taskModel = event.taskModel;
-    var taskList = state.taskList;
-    taskList.add(taskModel);
+    final taskModel = event.taskModel;
+    final taskList = state.taskList
+      ..add(taskModel)
+      ..sort((first, second) => first.title.compareTo(second.title));
 
-    taskList.sort((first, second) => first.title.compareTo(second.title));
-
-    yield TaskListLoadedSuccessState(
-        taskList: taskList,
-        currentPage: state.currentPage,
-        limit: state.limit,
-        count: state.count);
+    yield TaskListLoadedSuccessState(taskList: taskList);
   }
 
   Stream<TaskListState> _mapUpdateTaskState(UpdateTaskEvent event) async* {
-    var taskModel = event.taskModel;
-    var taskList = state.taskList;
+    final updatedTask = event.taskModel;
+    final taskList = state.taskList
+      ..removeWhere((item) => item.id == updatedTask.id)
+      ..add(updatedTask)
+      ..sort((first, second) => first.title.compareTo(second.title));
 
-    taskList.forEach((item) {
-      if(item.id == taskModel.id) {
-        item.title = taskModel.title;
-        item.priority = taskModel.priority;
-      }
-    });
-
-    taskList.sort((first, second) => first.title.compareTo(second.title));
-
-    yield TaskListLoadedSuccessState(
-        taskList: taskList,
-        currentPage: state.currentPage,
-        limit: state.limit,
-        count: state.count);
+    yield TaskListLoadedSuccessState(taskList: taskList);
   }
 
   /// =============== Events =================
@@ -172,15 +113,7 @@ class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
   }
 
   void loadMore() {
-    var currentPage = state.currentPage;
-    var limit = state.limit;
-    var count = state.limit;
-
-    add(LoadMoreTaskListEvent(
-      currentPage: currentPage,
-      limit: limit,
-      count: count
-    ));
+    add(LoadMoreTaskListEvent());
   }
 
   void onRefresh() {

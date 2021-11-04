@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_task_manager/data/models/models.dart';
+import 'package:flutter_task_manager/src/data/models/task/task_model.dart';
 import 'package:flutter_task_manager/src/presentation/screens/screens.dart';
 import 'package:flutter_task_manager/utils/utils.dart';
 import 'package:flutter_task_manager/src/presentation/blocs/blocs.dart';
@@ -20,15 +20,15 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
 
   @override
   void initState() {
-    BlocProvider.of<ShowTaskBloc>(context).showTaskDetails(widget.taskModel);
+    BlocProvider.of<ShowTaskCubit>(context).showTaskDetails(widget.taskModel);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ShowTaskBloc, TaskState>(
+    return BlocBuilder<ShowTaskCubit, ShowTaskState>(
       builder: (context, state) {
-        if(state is ShowTaskState) {
+        if(state is ShowTaskDetail) {
           return _buildMainContent(state.taskModel);
         } else {
           return Container();
@@ -119,10 +119,10 @@ class AppBarDetails extends StatelessWidget {
   }
 
   void _openEditTaskScreen(BuildContext context) async {
-    var taskBloc = BlocProvider.of<ShowTaskBloc>(context);
+    var taskBloc = BlocProvider.of<ShowTaskCubit>(context);
     var taskListBloc = BlocProvider.of<TaskListBloc>(context);
     var addEditTaskBloc = BlocProvider.of<AddEditTaskBloc>(context);
-    var editTaskScreen = AddEditScreen(taskModer: taskModel);
+    var editTaskScreen = AddEditScreen(taskModel: taskModel);
 
     var provides = MultiBlocProvider(
       providers: [
@@ -154,7 +154,7 @@ class Title extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.all(10),
-      color: Theme.of(context).appBarTheme.color,
+      color: Theme.of(context).appBarTheme.backgroundColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

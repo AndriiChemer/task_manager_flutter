@@ -15,9 +15,9 @@ class FilterScreen extends StatelessWidget {
         child: SettingsAppBar(),
       ),
       body: SafeArea(
-        child: BlocBuilder<FiltersBloc, FiltersState>(
+        child: BlocBuilder<FilterCubit, FilterState>(
           builder: (context, state) {
-            if(state is FiltersLoaded) {
+            if(state is FilterLoaded) {
 
               var filterModel = state.filtersModel;
 
@@ -53,11 +53,11 @@ class FilterScreen extends StatelessWidget {
   }
 
   void onFilterTypeSelected(BuildContext context, String value) {
-    BlocProvider.of<FiltersBloc>(context).onSortBySelect(value);
+    BlocProvider.of<FilterCubit>(context).setSortBy(value);
   }
 
   void onSortingTypeSelected(BuildContext context, String value) {
-    BlocProvider.of<FiltersBloc>(context).onOrderBySelect(value);
+    BlocProvider.of<FilterCubit>(context).setOrderBy(value);
   }
 }
 

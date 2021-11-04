@@ -17,7 +17,7 @@ class _$TaskModelTearOff {
   const _$TaskModelTearOff();
 
   _TaskModel call(
-      {required int id,
+      {int? id,
       required String title,
       required int dueBy,
       required String priority}) {
@@ -35,7 +35,7 @@ const $TaskModel = _$TaskModelTearOff();
 
 /// @nodoc
 mixin _$TaskModel {
-  int get id => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   int get dueBy => throw _privateConstructorUsedError;
   String get priority => throw _privateConstructorUsedError;
@@ -49,7 +49,7 @@ mixin _$TaskModel {
 abstract class $TaskModelCopyWith<$Res> {
   factory $TaskModelCopyWith(TaskModel value, $Res Function(TaskModel) then) =
       _$TaskModelCopyWithImpl<$Res>;
-  $Res call({int id, String title, int dueBy, String priority});
+  $Res call({int? id, String title, int dueBy, String priority});
 }
 
 /// @nodoc
@@ -71,7 +71,7 @@ class _$TaskModelCopyWithImpl<$Res> implements $TaskModelCopyWith<$Res> {
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -94,7 +94,7 @@ abstract class _$TaskModelCopyWith<$Res> implements $TaskModelCopyWith<$Res> {
           _TaskModel value, $Res Function(_TaskModel) then) =
       __$TaskModelCopyWithImpl<$Res>;
   @override
-  $Res call({int id, String title, int dueBy, String priority});
+  $Res call({int? id, String title, int dueBy, String priority});
 }
 
 /// @nodoc
@@ -117,7 +117,7 @@ class __$TaskModelCopyWithImpl<$Res> extends _$TaskModelCopyWithImpl<$Res>
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -138,14 +138,14 @@ class __$TaskModelCopyWithImpl<$Res> extends _$TaskModelCopyWithImpl<$Res>
 
 class _$_TaskModel extends _TaskModel {
   _$_TaskModel(
-      {required this.id,
+      {this.id,
       required this.title,
       required this.dueBy,
       required this.priority})
       : super._();
 
   @override
-  final int id;
+  final int? id;
   @override
   final String title;
   @override
@@ -189,14 +189,14 @@ class _$_TaskModel extends _TaskModel {
 
 abstract class _TaskModel extends TaskModel {
   factory _TaskModel(
-      {required int id,
+      {int? id,
       required String title,
       required int dueBy,
       required String priority}) = _$_TaskModel;
   _TaskModel._() : super._();
 
   @override
-  int get id => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
   @override
   String get title => throw _privateConstructorUsedError;
   @override

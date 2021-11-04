@@ -9,7 +9,6 @@ class GetTaskByIdUseCase implements UseCase<DataState<TaskModel>, int> {
   const GetTaskByIdUseCase(this._taskRepository);
 
   @override
-  Future<DataState<TaskModel>> call({required int params}) {
-    return _taskRepository.getTaskById(params);
-  }
+  Future<DataState<TaskModel>> call({required int params}) =>
+      _taskRepository.getTaskById(params);
 }

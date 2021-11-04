@@ -1,4 +1,4 @@
-import 'package:flutter_task_manager/data/models/models.dart';
+import 'package:flutter_task_manager/src/data/models/filter_types.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FiltersPreferences {

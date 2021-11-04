@@ -74,7 +74,7 @@ class _RegistrationFormPageState extends State<RegistrationFormPage> {
         Switch(
             value: true,
             onChanged: (value) {
-              BlocProvider.of<LoginRegistrationBloc>(context).switchForm();
+              BlocProvider.of<CredentialTypeCubit>(context).switchCredentialType();
             }
         )
       ],

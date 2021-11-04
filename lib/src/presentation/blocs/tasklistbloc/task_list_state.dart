@@ -3,11 +3,8 @@ part of 'task_list_bloc.dart';
 @immutable
 abstract class TaskListState {
   final List<TaskModel> taskList;
-  final int currentPage;
-  final int limit;
-  final int count;
 
-  TaskListState([this.taskList = const [], this.currentPage = 0, this.limit = 0, this.count = 0]);
+  TaskListState([this.taskList = const []]);
 }
 
 class TasksInitial extends TaskListState {
@@ -17,10 +14,8 @@ class TasksInitial extends TaskListState {
 class TaskListLoadedSuccessState extends TaskListState {
 
   TaskListLoadedSuccessState({
-    required List<TaskModel> taskList,
-    required int currentPage,
-    required int limit,
-    required int count}): super(taskList, currentPage, limit, count);
+    required List<TaskModel> taskList
+  }): super(taskList);
 
 }
 
@@ -28,12 +23,8 @@ class TaskListLoadFailState extends TaskListState {
   final String message;
 
   TaskListLoadFailState({
-    required List<TaskModel> taskList, 
-    this.message = "Something went wrong", 
-    int currentPage = 0,
-    int limit = 0,
-    int count = 0
-  }): super(taskList, currentPage, limit, count);
+    this.message = "Something went wrong",
+  }): super();
 }
 
 /// ============ Loading states ==================
@@ -41,9 +32,7 @@ class TaskListLoadingState extends TaskListState {
   
   TaskListLoadingState({
     required List<TaskModel> taskList,
-    required int currentPage,
-    required int limit,
-    required int count}): super(taskList, currentPage, limit, count);
+  }): super(taskList);
 }
 
 class TaskListLoadingMoreState extends TaskListState {}

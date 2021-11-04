@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_task_manager/src/data/datasources/remote/requests/request.dart';
+import 'package:flutter_task_manager/src/core/params/request.dart';
 
 abstract class RemoteDataSource {
 

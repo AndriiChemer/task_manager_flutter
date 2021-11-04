@@ -2,8 +2,8 @@ part of 'add_edit_task_bloc.dart';
 
 @immutable
 abstract class AddEditTaskEvent {
-  final String? title;
-  final String? description;
+  final String title;
+  final String description;
   final String? priority;
   final DateTime? dateTime;
 
@@ -13,8 +13,8 @@ abstract class AddEditTaskEvent {
 class AddTaskEvent extends AddEditTaskEvent {
 
   AddTaskEvent({
-    required String? title,
-    required String? description,
+    required String title,
+    required String description,
     required String? priority,
     required DateTime? dateTime})
       : super(
@@ -30,8 +30,8 @@ class EditTaskEvent extends AddEditTaskEvent {
 
   EditTaskEvent({
     required this.taskModel,
-    required String? title,
-    required String? description,
+    required String title,
+    required String description,
     required String? priority,
     required DateTime? dateTime})
       : super(

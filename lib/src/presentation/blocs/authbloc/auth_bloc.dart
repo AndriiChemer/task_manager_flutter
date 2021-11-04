@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_task_manager/data/remote/remote.dart';
-import 'package:flutter_task_manager/data/repository/repository.dart';
+import 'package:flutter_task_manager/src/core/params/request.dart';
+import 'package:flutter_task_manager/src/core/resources/data_state.dart';
+import 'package:flutter_task_manager/src/domain/usecases/auth/auth_user_usecase.dart';
+import 'package:flutter_task_manager/src/domain/usecases/auth/create_user_usecase.dart';
 import 'package:meta/meta.dart';
 
 part 'auth_event.dart';
@@ -10,55 +12,62 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
-  final UserRepository userRepository;
+  final CreateUserUseCase createUserUseCase;
+  final AuthUserUseCase authUserUseCase;
 
-  AuthBloc({required this.userRepository}) : super(AuthInitial());
+  AuthBloc({
+    required this.createUserUseCase,
+    required this.authUserUseCase,
+  }) : super(AuthInitial());
 
   @override
   Stream<AuthState> mapEventToState(
     AuthEvent event,
   ) async* {
-    if(event is LoginButtonClickEvent) {
+    if(event is LoginEvent) {
       yield* _mapLoginState(event);
     }
 
-    if(event is RegistrationButtonClickEvent) {
+    if(event is RegistrationEvent) {
       yield* _mapRegistrationState(event);
     }
   }
 
-  Stream<AuthState> _mapLoginState(LoginButtonClickEvent event) async* {
-    try {
-      yield LoadingState();
+  Stream<AuthState> _mapLoginState(LoginEvent event) async* {
+    yield LoadingState();
 
-      var userRequest = UserRequest(event.email, event.password);
-      await userRepository.auth(userRequest);
+    final userRequest = UserRequest(email: event.email, password: event.password);
+    final dataState = await authUserUseCase(params: userRequest);
 
+    if (dataState is DataSuccess) {
       yield SuccessState();
-    } catch(error) {
-      yield FailState(error.toString());
+    }
+
+    if (dataState is DataFailed) {
+      yield FailState(dataState.error.toString());
     }
   }
 
-  Stream<AuthState> _mapRegistrationState(RegistrationButtonClickEvent event) async* {
-    try {
-      yield LoadingState();
+  Stream<AuthState> _mapRegistrationState(RegistrationEvent event) async* {
+    yield LoadingState();
 
-      var userRequest = UserRequest(event.email, event.password);
-      await userRepository.createUser(userRequest);
+    final userRequest = UserRequest(email: event.email, password: event.password);
+    final dataState = await createUserUseCase(params: userRequest);
 
+    if (dataState is DataSuccess) {
       yield SuccessState();
-    } catch(error) {
+    }
 
-      yield FailState(error.toString());
+    if (dataState is DataFailed) {
+      yield FailState(dataState.error.toString());
     }
   }
 
   onRegistrationClicked(String email, String password) {
-    add(RegistrationButtonClickEvent(email: email, password: password));
+    add(RegistrationEvent(email: email, password: password));
   }
 
   onSignInClicked(String email, String password) {
-    add(LoginButtonClickEvent(email: email, password: password));
+    add(LoginEvent(email: email, password: password));
   }
 }

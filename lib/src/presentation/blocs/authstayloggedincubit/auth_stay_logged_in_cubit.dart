@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_task_manager/depicated/core/notifiers/notifiers.dart';
+import 'package:flutter_task_manager/src/core/notifiers/notifiers.dart';
 
 class AuthStateCubit extends Cubit<bool> {
   final AuthNotifier authNotifier;

@@ -13,16 +13,7 @@ class DeleteTaskEvent extends TaskListEvent {
   DeleteTaskEvent({required this.taskModel});
 }
 
-class LoadMoreTaskListEvent extends TaskListEvent {
-  final int currentPage;
-  final int count;
-  final int limit;
-
-  LoadMoreTaskListEvent({
-    required this.currentPage,
-    required this.count,
-    required this.limit});
-}
+class LoadMoreTaskListEvent extends TaskListEvent {}
 
 class AddNewTaskEvent extends TaskListEvent {
   final TaskModel taskModel;
