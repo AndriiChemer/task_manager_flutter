@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_task_manager/core/routes/navigation.dart';
 import 'package:flutter_task_manager/core/utils/utils.dart';
 import 'package:flutter_task_manager/features/data/models/models.dart';
+import 'package:flutter_task_manager/features/presentation/screens/screens.dart';
+import 'package:get_it/get_it.dart';
 
 class TaskWidget extends StatelessWidget {
 
@@ -90,24 +93,7 @@ class TaskWidget extends StatelessWidget {
   }
 
   void _openDetailScreen(BuildContext context) {
-    // TODO navigation
-    // var taskListBloc = BlocProvider.of<TaskListBloc>(context);
-    // var addEditTaskBloc = BlocProvider.of<AddEditTaskBloc>(context);
-    // var detailsScreen = TaskDetailsScreen(taskModel: taskModel);
-    // var taskBloc = ShowTaskBloc();
-    //
-    // var provides = MultiBlocProvider(
-    //   providers: [
-    //     BlocProvider.value(value: taskBloc),
-    //     BlocProvider.value(value: taskListBloc),
-    //     BlocProvider.value(value: addEditTaskBloc),
-    //   ],
-    //   child: detailsScreen,
-    // );
-    //
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => provides),
-    // );
+    GetIt.instance.get<NavigationService>()
+        .navigateTo(TaskDetailsScreen.id, taskModel);
   }
 }

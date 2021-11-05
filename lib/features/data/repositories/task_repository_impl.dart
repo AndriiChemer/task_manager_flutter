@@ -101,7 +101,7 @@ class TaskRepositoryImpl implements TaskRepository {
       final String orderBy = await _filtersPreferences.getOrderByType();
       final response = await _remoteDataSource.getTaskList(token, sortType, orderBy);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         final taskListResponse = TaskListResponse.fromJson(response.data);
 
         return DataSuccess(Pair(first: taskListResponse.tasks, second: taskListResponse.pagination));
@@ -126,7 +126,7 @@ class TaskRepositoryImpl implements TaskRepository {
       final String token = await _authPreferences.getToken();
       final response = await _remoteDataSource.updateTask(taskRequest.id!, token, taskRequest);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 202) {
         return DataSuccess(true);
       }
 

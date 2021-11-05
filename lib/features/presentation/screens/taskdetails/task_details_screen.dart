@@ -11,7 +11,7 @@ class TaskDetailsScreen extends StatefulWidget {
   static const String id = "/task_details";
   final TaskModel taskModel;
 
-  const TaskDetailsScreen({Key? key, required this.taskModel}): super(key: key);
+  const TaskDetailsScreen(this.taskModel);
 
   @override
   _TaskDetailsScreenState createState() => _TaskDetailsScreenState();
