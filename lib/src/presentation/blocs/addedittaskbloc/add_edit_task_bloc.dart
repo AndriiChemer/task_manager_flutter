@@ -5,6 +5,7 @@ import 'package:flutter_task_manager/src/core/params/request.dart';
 import 'package:flutter_task_manager/src/core/resources/data_state.dart';
 import 'package:flutter_task_manager/src/data/models/task/task_model.dart';
 import 'package:flutter_task_manager/src/domain/usecases/usecases.dart';
+import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 
 import '../blocs.dart';
@@ -12,6 +13,7 @@ import '../blocs.dart';
 part 'add_edit_task_event.dart';
 part 'add_edit_task_state.dart';
 
+@singleton
 class AddEditTaskBloc extends Bloc<AddEditTaskEvent, AddEditTaskState> {
   final TaskListBloc tasksBloc;
   final CreateTaskUseCase createTaskUseCase;

@@ -5,11 +5,13 @@ import 'package:flutter_task_manager/src/core/resources/data_state.dart';
 import 'package:flutter_task_manager/src/data/models/pagination/pagination_model.dart';
 import 'package:flutter_task_manager/src/data/models/task/task_model.dart';
 import 'package:flutter_task_manager/src/domain/usecases/usecases.dart';
+import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 
 part 'task_list_event.dart';
 part 'task_list_state.dart';
 
+@singleton
 class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
 
   GetTaskListUseCase getTaskListUseCase;

@@ -8,7 +8,9 @@ import 'package:flutter_task_manager/src/data/models/pagination/pagination_model
 import 'package:flutter_task_manager/src/data/models/task/task_model.dart';
 import 'package:flutter_task_manager/src/data/models/task_list_response.dart';
 import 'package:flutter_task_manager/src/domain/repositories/task_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: TaskRepository)
 class TaskRepositoryImpl implements TaskRepository {
 
   final RemoteDataSource _remoteDataSource;

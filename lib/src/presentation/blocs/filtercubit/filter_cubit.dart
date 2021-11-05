@@ -1,10 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_task_manager/src/core/preferences/preferences.dart';
 import 'package:flutter_task_manager/src/data/models/filters_model.dart';
+import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 
 part 'filter_state.dart';
 
+@injectable
 class FilterCubit extends Cubit<FilterState> {
   FilterCubit() : super(FilterInitial()) {
     _loadFilterState();

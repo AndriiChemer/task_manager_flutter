@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'pagination_model.dart';
 
@@ -146,22 +147,15 @@ class _$_PaginationModel extends _PaginationModel {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _PaginationModel &&
-            (identical(other.current, current) ||
-                const DeepCollectionEquality()
-                    .equals(other.current, current)) &&
-            (identical(other.limit, limit) ||
-                const DeepCollectionEquality().equals(other.limit, limit)) &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)));
+        (other.runtimeType == runtimeType &&
+            other is _PaginationModel &&
+            (identical(other.current, current) || other.current == current) &&
+            (identical(other.limit, limit) || other.limit == limit) &&
+            (identical(other.count, count) || other.count == count));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(current) ^
-      const DeepCollectionEquality().hash(limit) ^
-      const DeepCollectionEquality().hash(count);
+  int get hashCode => Object.hash(runtimeType, current, limit, count);
 
   @JsonKey(ignore: true)
   @override
@@ -177,11 +171,11 @@ abstract class _PaginationModel extends PaginationModel {
   _PaginationModel._() : super._();
 
   @override
-  int get current => throw _privateConstructorUsedError;
+  int get current;
   @override
-  int get limit => throw _privateConstructorUsedError;
+  int get limit;
   @override
-  int get count => throw _privateConstructorUsedError;
+  int get count;
   @override
   @JsonKey(ignore: true)
   _$PaginationModelCopyWith<_PaginationModel> get copyWith =>

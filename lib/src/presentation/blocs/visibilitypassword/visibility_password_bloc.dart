@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 
 part 'visibility_password_event.dart';
 part 'visibility_password_state.dart';
 
+@injectable
 class VisibilityPasswordBloc extends Bloc<VisibilityPasswordEvent, VisibilityPasswordState> {
   VisibilityPasswordBloc() : super(VisibilityPasswordInvisible());
 

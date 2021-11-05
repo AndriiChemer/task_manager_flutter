@@ -4,7 +4,9 @@ import 'package:flutter_task_manager/src/core/resources/data_state.dart';
 import 'package:flutter_task_manager/src/data/datasources/remote/remote_data_source.dart';
 import 'package:flutter_task_manager/src/core/params/request.dart';
 import 'package:flutter_task_manager/src/domain/repositories/user_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: UserRepository)
 class UserRepositoryImpl implements UserRepository {
 
   final RemoteDataSource _remoteDataSource;

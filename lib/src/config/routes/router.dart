@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task_manager/src/presentation/blocs/blocs.dart';
 import 'package:flutter_task_manager/src/presentation/screens/screens.dart';
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 
+@lazySingleton
 class AppRouter {
-
 
   Route generateRoute(RouteSettings settings) {
     switch(settings.name) {
@@ -23,10 +25,10 @@ class AppRouter {
 
   MaterialPageRoute _getAddEditScreen() {
     return MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-          value: _addEditTaskBloc,
-          child: AddEditScreen(),
-        )
+        builder: (_) =>
+            BlocProvider.value(
+              value: GetIt.instance.get<AddEditTaskBloc>(),
+              child: AddEditScreen(),)
     );
   }
 
@@ -34,9 +36,9 @@ class AppRouter {
     return MaterialPageRoute(
         builder: (_) => MultiBlocProvider(
           providers: [
-            BlocProvider.value(value: AuthStateCubit(authNotifier: authNotifier)),
-            BlocProvider.value(value: _tasksBloc),
-            BlocProvider.value(value: _addEditTaskBloc),
+            BlocProvider.value(value: GetIt.instance.get<AuthStateCubit>(),),
+            BlocProvider.value(value: GetIt.instance.get<TaskListBloc>(),),
+            BlocProvider.value(value: GetIt.instance.get<AddEditTaskBloc>(),),
           ],
           child: TaskListScreen(),
         )
@@ -47,8 +49,8 @@ class AppRouter {
     return MaterialPageRoute(
         builder: (_) => MultiBlocProvider(
           providers: [
-            BlocProvider(create: (_) => CredentialTypeCubit()),
-            BlocProvider(create: (_) => AuthBloc(userRepository: _userRepository))
+            BlocProvider(create: (_) => GetIt.instance.get<CredentialTypeCubit>()),
+            BlocProvider(create: (_) => GetIt.instance.get<AuthBloc>())
           ],
           child: LoginRegistrationScreen(),
         )
@@ -59,8 +61,7 @@ class AppRouter {
     return MaterialPageRoute(
         builder: (_) => MultiBlocProvider(
           providers: [
-            BlocProvider.value(value: _filtersBloc,),
-            // BlocProvider(create: (_) => _filtersBloc),
+            BlocProvider.value(value: GetIt.instance.get<FilterCubit>()),
           ],
           child: FilterScreen(),
         )

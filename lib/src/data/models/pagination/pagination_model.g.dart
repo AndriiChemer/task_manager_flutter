@@ -6,13 +6,12 @@ part of 'pagination_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PaginationModel _$PaginationModelFromJson(Map<String, dynamic> json) {
-  return PaginationModel(
-    current: json['current'] as int,
-    limit: json['limit'] as int,
-    count: json['count'] as int,
-  );
-}
+PaginationModel _$PaginationModelFromJson(Map<String, dynamic> json) =>
+    PaginationModel(
+      current: json['current'] as int,
+      limit: json['limit'] as int,
+      count: json['count'] as int,
+    );
 
 Map<String, dynamic> _$PaginationModelToJson(PaginationModel instance) =>
     <String, dynamic>{

@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_task_manager/src/core/notifiers/notifiers.dart';
 import 'package:flutter_task_manager/src/core/params/request.dart';
+import 'package:injectable/injectable.dart';
 import 'remote_data_source.dart';
 
+@LazySingleton(as: RemoteDataSource)
 class RemoteDataSourceImpl implements RemoteDataSource {
   final _dio = Dio();
   final AuthNotifier _authNotifier;

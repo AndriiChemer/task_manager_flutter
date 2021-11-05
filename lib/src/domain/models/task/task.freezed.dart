@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'task.dart';
 
@@ -159,25 +160,17 @@ class _$_Task extends _Task {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Task &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.title, title) ||
-                const DeepCollectionEquality().equals(other.title, title)) &&
-            (identical(other.dueBy, dueBy) ||
-                const DeepCollectionEquality().equals(other.dueBy, dueBy)) &&
+        (other.runtimeType == runtimeType &&
+            other is _Task &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.dueBy, dueBy) || other.dueBy == dueBy) &&
             (identical(other.priority, priority) ||
-                const DeepCollectionEquality()
-                    .equals(other.priority, priority)));
+                other.priority == priority));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(title) ^
-      const DeepCollectionEquality().hash(dueBy) ^
-      const DeepCollectionEquality().hash(priority);
+  int get hashCode => Object.hash(runtimeType, id, title, dueBy, priority);
 
   @JsonKey(ignore: true)
   @override
@@ -194,13 +187,13 @@ abstract class _Task extends Task {
   _Task._() : super._();
 
   @override
-  int get id => throw _privateConstructorUsedError;
+  int get id;
   @override
-  String get title => throw _privateConstructorUsedError;
+  String get title;
   @override
-  int get dueBy => throw _privateConstructorUsedError;
+  int get dueBy;
   @override
-  String get priority => throw _privateConstructorUsedError;
+  String get priority;
   @override
   @JsonKey(ignore: true)
   _$TaskCopyWith<_Task> get copyWith => throw _privateConstructorUsedError;

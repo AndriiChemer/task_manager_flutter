@@ -5,11 +5,13 @@ import 'package:flutter_task_manager/src/core/params/request.dart';
 import 'package:flutter_task_manager/src/core/resources/data_state.dart';
 import 'package:flutter_task_manager/src/domain/usecases/auth/auth_user_usecase.dart';
 import 'package:flutter_task_manager/src/domain/usecases/auth/create_user_usecase.dart';
+import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
+@injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   final CreateUserUseCase createUserUseCase;

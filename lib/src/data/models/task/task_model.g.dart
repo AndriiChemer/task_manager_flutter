@@ -6,14 +6,12 @@ part of 'task_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TaskModel _$TaskModelFromJson(Map<String, dynamic> json) {
-  return TaskModel(
-    id: json['id'] as int?,
-    title: json['title'] as String,
-    dueBy: json['dueBy'] as int,
-    priority: json['priority'] as String,
-  );
-}
+TaskModel _$TaskModelFromJson(Map<String, dynamic> json) => TaskModel(
+      id: json['id'] as int?,
+      title: json['title'] as String,
+      dueBy: json['dueBy'] as int,
+      priority: json['priority'] as String,
+    );
 
 Map<String, dynamic> _$TaskModelToJson(TaskModel instance) => <String, dynamic>{
       'id': instance.id,
