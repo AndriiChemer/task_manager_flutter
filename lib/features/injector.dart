@@ -1,5 +1,7 @@
+import 'package:flutter_task_manager/core/preferences/preferences.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'injector.config.dart';
 
@@ -10,4 +12,10 @@ final getIt = GetIt.instance;
   preferRelativeImports: true, // default
   asExtension: false, // default
 )
-void configureDependencies() => $initGetIt(getIt);
+Future<void> configureDependencies() async {
+
+  getIt.registerFactory<AuthPreferences>(() => AuthPreferences(getIt.get()));
+  getIt.registerFactory<FiltersPreferences>(() => FiltersPreferences(getIt.get()));
+
+  await $initGetIt(getIt, environment: Environment.prod);
+}

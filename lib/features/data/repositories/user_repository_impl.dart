@@ -10,7 +10,9 @@ import 'package:injectable/injectable.dart';
 class UserRepositoryImpl implements UserRepository {
 
   final RemoteDataSource _remoteDataSource;
-  const UserRepositoryImpl(this._remoteDataSource);
+  final AuthPreferences _authPreferences;
+
+  const UserRepositoryImpl(this._remoteDataSource, this._authPreferences);
 
   @override
   Future<DataState<String>> auth(UserRequest userRequest) async {
@@ -34,7 +36,7 @@ class UserRepositoryImpl implements UserRepository {
 
       if (response.statusCode == 200) {
         var token = response.data['token'];
-        AuthPreferences.saveToken(token);
+        _authPreferences.saveToken(token);
         return DataSuccess(token);
       }
 

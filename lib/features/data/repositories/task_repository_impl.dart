@@ -12,16 +12,21 @@ import 'package:injectable/injectable.dart';
 class TaskRepositoryImpl implements TaskRepository {
 
   final RemoteDataSource _remoteDataSource;
+  final AuthPreferences _authPreferences;
+  final FiltersPreferences _filtersPreferences;
 
-  const TaskRepositoryImpl(this._remoteDataSource);
+  const TaskRepositoryImpl(
+      this._remoteDataSource,
+      this._authPreferences,
+      this._filtersPreferences);
 
   @override
   Future<DataState<TaskModel>> createTask(TaskRequest taskRequest) async {
     try {
-      final String token = await AuthPreferences.getToken();
+      final String token = await _authPreferences.getToken();
       final response = await _remoteDataSource.createTask(token, taskRequest);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         final taskJson = response.data["task"];
 
         return DataSuccess(TaskModel.fromMapJson(taskJson));
@@ -43,10 +48,10 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<DataState<bool>> deleteTaskById(int id) async {
     try {
-      final String token = await AuthPreferences.getToken();
+      final String token = await _authPreferences.getToken();
       final response = await _remoteDataSource.deleteTask(id, token);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 202) {
         return DataSuccess(true);
       }
 
@@ -66,7 +71,7 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<DataState<TaskModel>> getTaskById(int taskId) async {
     try {
-      final String token = await AuthPreferences.getToken();
+      final String token = await _authPreferences.getToken();
       final response = await _remoteDataSource.getTaskById(taskId, token);
 
       if (response.statusCode == 200) {
@@ -91,12 +96,12 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<DataState<Pair<List<TaskModel>, PaginationModel>>> getTaskList() async {
     try {
-      final String token = await AuthPreferences.getToken();
-      final String sortType = await FiltersPreferences.getSortByType();
-      final String orderBy = await FiltersPreferences.getOrderByType();
+      final String token = await _authPreferences.getToken();
+      final String sortType = await _filtersPreferences.getSortByType();
+      final String orderBy = await _filtersPreferences.getOrderByType();
       final response = await _remoteDataSource.getTaskList(token, sortType, orderBy);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         final taskListResponse = TaskListResponse.fromJson(response.data);
 
         return DataSuccess(Pair(first: taskListResponse.tasks, second: taskListResponse.pagination));
@@ -118,10 +123,10 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<DataState<bool>> updateTask(TaskRequest taskRequest) async {
     try {
-      final String token = await AuthPreferences.getToken();
+      final String token = await _authPreferences.getToken();
       final response = await _remoteDataSource.updateTask(taskRequest.id!, token, taskRequest);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return DataSuccess(true);
       }
 

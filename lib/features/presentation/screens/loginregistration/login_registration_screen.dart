@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_task_manager/config/routes/navigation.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
 import 'package:flutter_task_manager/core/utils/utils.dart';
 import 'package:flutter_task_manager/features/presentation/blocs/blocs.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/widgets.dart';
+import 'package:get_it/get_it.dart';
 
 part 'registration_form_page.dart';
 
 part 'login_form_page.dart';
 
 class LoginRegistrationScreen extends StatelessWidget {
-  // static const String id = "/";
   static const String id = "/login_registration";
 
   @override
@@ -20,7 +21,7 @@ class LoginRegistrationScreen extends StatelessWidget {
         child: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if(state is SuccessState) {
-              _openTaskListScreen(context);
+              _openTaskListScreen();
             } else if(state is FailState) {
               _showErrorDialogMessage(context, state.message);
             }
@@ -58,8 +59,8 @@ class LoginRegistrationScreen extends StatelessWidget {
     context.showNegativeMessage(message);
   }
 
-  void _openTaskListScreen(BuildContext context) {
-    //TODO navigation
-    // Navigator.of(context).pushNamedAndRemoveUntil(TaskListScreen.id, (Route<dynamic> route) => false);
+  void _openTaskListScreen() {
+    GetIt.instance.get<NavigationService>()
+        .pushReplacement(LoginRegistrationScreen.id);
   }
 }

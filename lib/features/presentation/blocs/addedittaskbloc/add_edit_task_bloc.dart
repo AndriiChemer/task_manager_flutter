@@ -14,7 +14,7 @@ import '../blocs.dart';
 part 'add_edit_task_event.dart';
 part 'add_edit_task_state.dart';
 
-@singleton
+@lazySingleton
 class AddEditTaskBloc extends Bloc<AddEditTaskEvent, AddEditTaskState> {
   final TaskListBloc tasksBloc;
   final CreateTaskUseCase createTaskUseCase;

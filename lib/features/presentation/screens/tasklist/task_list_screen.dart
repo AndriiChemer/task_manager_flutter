@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_task_manager/config/routes/navigation.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
 import 'package:flutter_task_manager/features/data/models/models.dart';
 import 'package:flutter_task_manager/features/presentation/blocs/blocs.dart';
 import 'package:flutter_task_manager/features/presentation/screens/screens.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/widgets.dart';
+import 'package:get_it/get_it.dart';
 
 class TaskListScreen extends StatefulWidget {
   static const String id = "/";
@@ -40,11 +42,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
       ),
       floatingActionButton: AddTaskButton(),
       body: BlocListener<AuthStateCubit, bool>(
-        listener: (context, isUserAuthorized) {
-          if(!isUserAuthorized) {
-            _openAuthorizationScreen();
-          }
-        },
+        listener: _listenAuthorizationState,
         child: BlocListener<TaskListBloc, TaskListState>(
           listener: (context, state) {
             if (state is TaskListLoadFailState) {
@@ -93,9 +91,11 @@ class _TaskListScreenState extends State<TaskListScreen> {
     _tasksBloc.onRefresh();
   }
 
-  void _openAuthorizationScreen() {
-    //TODO navigation
-    // Navigator.of(context).pushNamedAndRemoveUntil(LoginRegistrationScreen.id, (Route<dynamic> route) => false);
+  void _listenAuthorizationState(BuildContext context, bool isUserAuthorized) {
+    if(!isUserAuthorized) {
+      GetIt.instance.get<NavigationService>()
+          .pushReplacement(LoginRegistrationScreen.id);
+    }
   }
 
   void _scrollListener() {
@@ -145,8 +145,8 @@ class AddTaskButton extends StatelessWidget {
   }
 
   _openAddTaskScreen(BuildContext context) {
-    //TODO navigation
-    // Navigator.pushNamed(context, AddEditScreen.id);
+    GetIt.instance.get<NavigationService>()
+        .navigateTo(AddEditScreen.id);
   }
 }
 

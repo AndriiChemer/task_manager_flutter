@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_task_manager/core/preferences/preferences.dart';
 import 'package:get_it/get_it.dart';
 
 import 'config/routes/navigation.dart';
@@ -11,10 +10,7 @@ import 'features/injector.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
-
-  await AuthPreferences.init();
-  await FiltersPreferences.init();
+  await configureDependencies();
 
   runApp(TaskManager());
 }

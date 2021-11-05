@@ -10,7 +10,7 @@ import 'package:meta/meta.dart';
 part 'task_list_event.dart';
 part 'task_list_state.dart';
 
-@singleton
+@lazySingleton
 class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
 
   GetTaskListUseCase getTaskListUseCase;

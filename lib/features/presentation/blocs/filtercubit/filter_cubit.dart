@@ -8,25 +8,27 @@ part 'filter_state.dart';
 
 @injectable
 class FilterCubit extends Cubit<FilterState> {
-  FilterCubit() : super(FilterInitial()) {
+  final FiltersPreferences _filtersPreferences;
+
+  FilterCubit(this._filtersPreferences) : super(FilterInitial()) {
     _loadFilterState();
   }
 
   _loadFilterState() async {
-    final filterType = await FiltersPreferences.getSortByType();
-    final orderBy = await FiltersPreferences.getOrderByType();
+    final filterType = await _filtersPreferences.getSortByType();
+    final orderBy = await _filtersPreferences.getOrderByType();
     final filterModel = FiltersModel(sortBy: filterType, orderBy: orderBy);
 
     emit(FilterLoaded(filterModel));
   }
 
   setSortBy(final String sortBy) async {
-    await FiltersPreferences.setSortByType(sortBy);
+    await _filtersPreferences.setSortByType(sortBy);
     await _loadFilterState();
   }
 
   setOrderBy(final String orderBy) async {
-    await FiltersPreferences.setOrderByType(orderBy);
+    await _filtersPreferences.setOrderByType(orderBy);
     await _loadFilterState();
   }
 }

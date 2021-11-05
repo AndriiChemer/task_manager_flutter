@@ -28,7 +28,8 @@ class AppRouter {
         builder: (_) =>
             BlocProvider.value(
               value: GetIt.instance.get<AddEditTaskBloc>(),
-              child: AddEditScreen(),)
+              child: AddEditScreen(),
+            )
     );
   }
 
