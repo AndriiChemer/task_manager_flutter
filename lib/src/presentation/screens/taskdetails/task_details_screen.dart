@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task_manager/src/data/models/task/task_model.dart';
 import 'package:flutter_task_manager/src/presentation/screens/screens.dart';
-import 'package:flutter_task_manager/utils/utils.dart';
+import 'package:flutter_task_manager/src/core/utils/utils.dart';
 import 'package:flutter_task_manager/src/presentation/blocs/blocs.dart';
 import 'package:flutter_task_manager/src/presentation/widgets/widgets.dart';
 

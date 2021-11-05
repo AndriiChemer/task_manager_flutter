@@ -5,7 +5,7 @@ import 'package:flutter_task_manager/src/data/models/task/task_model.dart';
 import 'package:flutter_task_manager/src/presentation/blocs/blocs.dart';
 import 'package:flutter_task_manager/src/presentation/screens/screens.dart';
 import 'package:flutter_task_manager/src/presentation/widgets/widgets.dart';
-import 'package:flutter_task_manager/utils/utils.dart';
+import 'package:flutter_task_manager/src/core/utils/utils.dart';
 
 class TaskListScreen extends StatefulWidget {
   static const String id = "/";

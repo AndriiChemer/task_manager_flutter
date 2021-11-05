@@ -5,7 +5,7 @@ import 'package:flutter_task_manager/src/core/preferences/preferences.dart';
 import 'package:flutter_task_manager/src/injector.dart';
 import 'package:get_it/get_it.dart';
 import 'src/config/routes/router.dart';
-import 'utils/utils.dart';
+import 'src/core/utils/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_task_manager/utils/utils.dart';
+import 'package:flutter_task_manager/src/core/utils/utils.dart';
 
 extension ProviderExtensions on BuildContext {
   String getString(String string) =>
