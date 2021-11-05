@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_task_manager/core/theme/theme_data.dart';
 import 'package:get_it/get_it.dart';
 
-import 'config/routes/navigation.dart';
-import 'config/routes/router.dart';
-import 'config/theme/theme_data.dart';
+import 'core/routes/navigation.dart';
+import 'core/routes/router.dart';
 import 'core/utils/app_localizations.dart';
 import 'features/injector.dart';
 

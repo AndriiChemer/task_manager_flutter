@@ -8,8 +8,8 @@ import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:shared_preferences/shared_preferences.dart' as _i18;
 
-import '../config/routes/navigation.dart' as _i14;
-import '../config/routes/router.dart' as _i6;
+import '../core/routes/navigation.dart' as _i14;
+import '../core/routes/router.dart' as _i6;
 import '../core/notifiers/auth_notifier.dart' as _i8;
 import '../core/notifiers/notifiers.dart' as _i10;
 import '../core/preferences/preferences.dart' as _i13;

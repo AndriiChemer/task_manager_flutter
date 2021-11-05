@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_task_manager/config/routes/navigation.dart';
+import 'package:flutter_task_manager/core/routes/navigation.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
 import 'package:flutter_task_manager/core/utils/utils.dart';
 import 'package:flutter_task_manager/features/presentation/blocs/blocs.dart';
