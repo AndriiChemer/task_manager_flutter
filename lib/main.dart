@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_task_manager/src/config/routes/navigation.dart';
-import 'package:flutter_task_manager/src/config/theme/theme.dart';
-import 'package:flutter_task_manager/src/core/preferences/preferences.dart';
-import 'package:flutter_task_manager/src/injector.dart';
+import 'package:flutter_task_manager/core/preferences/preferences.dart';
 import 'package:get_it/get_it.dart';
-import 'src/config/routes/router.dart';
-import 'src/core/utils/utils.dart';
+
+import 'config/routes/navigation.dart';
+import 'config/routes/router.dart';
+import 'config/theme/theme_data.dart';
+import 'core/utils/app_localizations.dart';
+import 'features/injector.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
