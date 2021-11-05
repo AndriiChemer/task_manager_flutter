@@ -18,7 +18,6 @@ void main() async {
 class TaskManager extends StatelessWidget {
 
   final AppRouter router;
-
   const TaskManager({required this.router});
 
   @override
