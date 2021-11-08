@@ -1,44 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
 import 'package:flutter_task_manager/features/data/models/models.dart';
 import 'package:flutter_task_manager/features/presentation/blocs/blocs.dart';
+import 'package:flutter_task_manager/features/presentation/hooks/hooks.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 
-class AddEditScreen extends StatefulWidget {
+class AddEditScreen extends HookWidget {
   static const String id = "/add_edit_screen";
 
   final TaskModel? taskModel;
-
   const AddEditScreen({Key? key, this.taskModel}) : super(key: key);
 
   bool get isAddTaskScreen => taskModel == null;
 
   @override
-  _AddEditScreenState createState() => _AddEditScreenState();
-}
-
-class _AddEditScreenState extends State<AddEditScreen> {
-
-  BehaviorSubject<String?> toggleButtonController = BehaviorSubject<String?>();
-  BehaviorSubject<DateTime?> dateTimeController = BehaviorSubject<DateTime?>();
-  TextEditingController titleController = new TextEditingController();
-  TextEditingController descriptionController = new TextEditingController();
-
-  @override
-  void initState() {
-    titleController.text = widget.taskModel != null ? widget.taskModel!.title : "";
-    descriptionController.text = '';
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final dateTimeController = useBehaviorSubject<DateTime?>();
+    final priorityController = useMemoized(() => BehaviorSubject<String?>());
+    final titleController = useTextEditingController();
+    final descriptionController = useTextEditingController();
+
+    useEffect(() {
+      titleController.text = taskModel != null ? taskModel!.title : "";
+      return priorityController.close;
+    }, const []);
+
+    useEffect(() {
+      descriptionController.text = '';
+      return dateTimeController.close;
+    }, const []);
+
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 57),
-        child: AddEditAppBar(isAddTaskScreen: widget.isAddTaskScreen),
+        child: AddEditAppBar(isAddTaskScreen: isAddTaskScreen),
       ),
       body: SafeArea(
         child: BlocListener<AddEditTaskBloc, AddEditTaskState>(
@@ -47,32 +46,37 @@ class _AddEditScreenState extends State<AddEditScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: ListView(
-                  children: [
+                  child: ListView(
+                    children: [
 
-                    TitleWidget(title: context.getString("title"),),
-                    TitleInputText(titleController: titleController,),
-                    Divider(),
+                      TitleWidget(title: context.getString("title"),),
+                      TitleInputText(titleController: titleController,),
+                      Divider(),
 
-                    TitleWidget(title: context.getString("priority"),),
-                    PriorityContainer(
-                      toggleButtonController: toggleButtonController,
-                      priority: widget.taskModel?.priority,),
-                    Divider(),
+                      TitleWidget(title: context.getString("priority"),),
+                      PriorityContainer(
+                        toggleButtonController: priorityController,
+                        priority: taskModel?.priority,),
+                      Divider(),
 
-                    TitleWidget(title: context.getString("description"),),
-                    DescriptionInputText(descriptionController: descriptionController,),
-                    Divider(),
+                      TitleWidget(title: context.getString("description"),),
+                      DescriptionInputText(descriptionController: descriptionController,),
+                      Divider(),
 
-                    NotificationTimeContainer(controller: dateTimeController, initialTimeStamp: widget.taskModel?.dueBy,),
-                    Divider(),
-                  ],
-                )
+                      NotificationTimeContainer(controller: dateTimeController, initialTimeStamp: taskModel?.dueBy,),
+                      Divider(),
+                    ],
+                  )
               ),
 
               SaveButton(
                 onPressed: () {
-                  _onSaveButtonClick();
+                  _onSaveButtonClick(context,
+                    title: titleController.text,
+                    description: descriptionController.text,
+                    priority: priorityController.value,
+                    dateTime: dateTimeController.value
+                  );
                 },
               ),
             ],
@@ -82,14 +86,16 @@ class _AddEditScreenState extends State<AddEditScreen> {
     );
   }
 
-  void _onSaveButtonClick() async {
-    var addEditTaskBloc = BlocProvider.of<AddEditTaskBloc>(context);
-    var isAddNewTaskScreen = widget.taskModel == null;
+  void _onSaveButtonClick(
+      BuildContext context, {
+    required String title,
+    required String description,
+    String? priority,
+    DateTime? dateTime
+}) async {
 
-    final title = titleController.text;
-    final description = titleController.text;
-    final priority = toggleButtonController.hasValue ? toggleButtonController.value : null;
-    final dateTime = dateTimeController.hasValue ? dateTimeController.value : null;
+    final addEditTaskBloc = BlocProvider.of<AddEditTaskBloc>(context);
+    final isAddNewTaskScreen = taskModel == null;
 
     if(isAddNewTaskScreen) {
       addEditTaskBloc.add(AddTaskEvent(
@@ -99,7 +105,7 @@ class _AddEditScreenState extends State<AddEditScreen> {
           dateTime: dateTime));
     } else {
       addEditTaskBloc.add(EditTaskEvent(
-          taskModel: widget.taskModel!,
+          taskModel: taskModel!,
           title: title,
           description: description,
           priority: priority,
@@ -118,13 +124,6 @@ class _AddEditScreenState extends State<AddEditScreen> {
     } else if(state is EditTaskSuccess) {
       Navigator.pop(context, state.taskModel);
     }
-  }
-
-  @override
-  void dispose() {
-    dateTimeController.close();
-    toggleButtonController.close();
-    super.dispose();
   }
 }
 
@@ -193,7 +192,7 @@ class TitleInputText extends StatelessWidget {
         child: CustomTextFormWidget(
           controller: titleController,
           maxLines: 2,
-          borderColor: Theme.of(context).appBarTheme.color,
+          borderColor: Theme.of(context).appBarTheme.backgroundColor,
         )
     );
   }
@@ -212,7 +211,7 @@ class DescriptionInputText extends StatelessWidget {
         child: CustomTextFormWidget(
           controller: descriptionController,
           maxLines: 2,
-          borderColor: Theme.of(context).appBarTheme.color,
+          borderColor: Theme.of(context).appBarTheme.backgroundColor,
         )
     );
   }
