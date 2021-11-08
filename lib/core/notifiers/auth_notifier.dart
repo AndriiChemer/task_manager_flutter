@@ -5,7 +5,6 @@ import 'package:injectable/injectable.dart';
 class AuthNotifier extends ChangeNotifier {
   bool isUserAuthorized = true;
 
-  // final authNotifier = GetIt.instance.get<AuthNotifier>();
   void setUserAuthorization(bool isUserAuthorized) {
     this.isUserAuthorized = isUserAuthorized;
     notifyListeners();

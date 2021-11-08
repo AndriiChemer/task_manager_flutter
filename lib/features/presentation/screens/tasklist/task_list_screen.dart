@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_task_manager/core/routes/navigation.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
 import 'package:flutter_task_manager/features/data/models/models.dart';
@@ -9,32 +10,31 @@ import 'package:flutter_task_manager/features/presentation/screens/screens.dart'
 import 'package:flutter_task_manager/features/presentation/widgets/widgets.dart';
 import 'package:get_it/get_it.dart';
 
-class TaskListScreen extends StatefulWidget {
+class TaskListScreen extends HookWidget {
   static const String id = "/";
 
   @override
-  _TaskListScreenState createState() => _TaskListScreenState();
-}
-
-class _TaskListScreenState extends State<TaskListScreen> {
-
-  late TaskListBloc _tasksBloc;
-  late ScrollController _scrollController;
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
-
-  @override
-  void initState() {
-    SchedulerBinding.instance!.addPostFrameCallback((_){  _refreshIndicatorKey.currentState?.show(); } );
-    _tasksBloc = BlocProvider.of<TaskListBloc>(context);
-    _scrollController = ScrollController()..addListener(_scrollListener);
-
-    _tasksBloc.add(GetTaskListEvent());
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+    final scrollController = useScrollController();
+    final taskListBloc = BlocProvider.of<TaskListBloc>(context);
+
+    final onRefreshCallback = useCallback(() { taskListBloc.onRefresh(); }, []);
+    final onLoadMoreCallback = useCallback(() { taskListBloc.loadMore(); }, []);
+
+    scrollController.addListener(() {
+      _scrollListener(scrollController, onLoadMoreCallback);
+    });
+
+    useMemoized(() {
+      SchedulerBinding.instance!.addPostFrameCallback(
+              (_){  _refreshIndicatorKey.currentState?.show(); } );
+    });
+
+    useMemoized(() {
+      taskListBloc.add(GetTaskListEvent());
+    });
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 57),
@@ -57,7 +57,11 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 if (state is TaskListLoadingState) {
                   return LoadingProgress();
                 } else {
-                  return _buildItems(task);
+                  return _buildItems(
+                      _refreshIndicatorKey,
+                      scrollController,
+                      task,
+                      onRefreshCallback);
                 }
               },
             ),
@@ -67,15 +71,19 @@ class _TaskListScreenState extends State<TaskListScreen> {
     );
   }
 
-  Widget _buildItems(List<TaskModel> tasks) {
+  Widget _buildItems(
+      GlobalKey<RefreshIndicatorState> refreshIndicatorKey,
+      ScrollController scrollController,
+      List<TaskModel> tasks,
+      Function() onRefresh) {
     return Column(
       children: [
         Expanded(
           child: RefreshIndicator(
-            key: _refreshIndicatorKey,
-            onRefresh: _onRefresh,
+            key: refreshIndicatorKey,
+            onRefresh: () async { onRefresh(); },
             child: ListView.separated(
-                controller: _scrollController,
+                controller: scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: tasks.length,
                 separatorBuilder: (context, index) => Divider(),
@@ -87,22 +95,19 @@ class _TaskListScreenState extends State<TaskListScreen> {
     );
   }
 
-  Future<void> _onRefresh() async {
-    _tasksBloc.onRefresh();
-  }
-
-  void _listenAuthorizationState(BuildContext context, bool isUserAuthorized) {
-    if(!isUserAuthorized) {
-      GetIt.instance.get<NavigationService>()
-          .pushReplacement(LoginRegistrationScreen.id);
+  void _scrollListener(ScrollController scrollController, Function() onLoadMore) {
+    var pixels = scrollController.position.pixels;
+    var maxScrollExtent = scrollController.position.maxScrollExtent;
+    if (maxScrollExtent == pixels) {
+      onLoadMore();
     }
   }
 
-  void _scrollListener() {
-    var pixels = _scrollController.position.pixels; 
-    var maxScrollExtent = _scrollController.position.maxScrollExtent;
-    if (maxScrollExtent == pixels) {
-      _tasksBloc.loadMore();
+  void _listenAuthorizationState(BuildContext context, bool isUserAuthorized) {
+    print("ANDRII isUserAuthorized: $isUserAuthorized");
+    if(!isUserAuthorized) {
+      GetIt.instance.get<NavigationService>()
+          .pushReplacement(LoginRegistrationScreen.id);
     }
   }
 }

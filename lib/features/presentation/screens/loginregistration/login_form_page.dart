@@ -9,7 +9,7 @@ class LoginFormPage extends HookWidget {
     final passwordController = useTextEditingController();
     final _formKey = GlobalKey<FormState>();
 
-    var onLoginClickCallback = useCallback(() {
+    final onLoginClickCallback = useCallback(() {
       if (_formKey.currentState!.validate()) {
         var email = emailController.text;
         var password = passwordController.text;
@@ -35,13 +35,19 @@ class LoginFormPage extends HookWidget {
         ],
       ),
     );
+
   }
 
   Widget _buildTitle(BuildContext context) {
-    return AuthorizationTitleWidget(
-        title: context.getString("sing_in"),
-        fontSize: 26,
-        fontWeight: FontWeight.w800
+    return GestureDetector(
+      onDoubleTap: () {
+        context.showPositiveMessage("itest@itest.com\titest123");
+      },
+      child: AuthorizationTitleWidget(
+          title: context.getString("sing_in"),
+          fontSize: 26,
+          fontWeight: FontWeight.w800
+      ),
     );
   }
 

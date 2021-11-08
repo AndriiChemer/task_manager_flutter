@@ -5,6 +5,8 @@ import 'package:flutter_task_manager/core/routes/navigation.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
 import 'package:flutter_task_manager/core/utils/utils.dart';
 import 'package:flutter_task_manager/features/presentation/blocs/blocs.dart';
+import 'package:flutter_task_manager/features/presentation/screens/loginregistration/use_login_form.dart';
+import 'package:flutter_task_manager/features/presentation/screens/screens.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/widgets.dart';
 import 'package:get_it/get_it.dart';
 
@@ -26,7 +28,6 @@ class LoginRegistrationScreen extends StatelessWidget {
               padding: const EdgeInsets.only(left: 40, right: 40,),
               child: BlocBuilder<CredentialTypeCubit, CredentialTypeState>(
                   builder: (context, state) {
-                    print("state: $state");
                     if (state is LoginState) {
                       return LoginFormPage();
                     } else if (state is RegistrationState) {
@@ -45,7 +46,7 @@ class LoginRegistrationScreen extends StatelessWidget {
 
   void _openTaskListScreen() {
     GetIt.instance.get<NavigationService>()
-        .pushReplacement(LoginRegistrationScreen.id);
+        .pushReplacement(TaskListScreen.id);
   }
 
   void _listenAuthState(BuildContext context, AuthState state) {
