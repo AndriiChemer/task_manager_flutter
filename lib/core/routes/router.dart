@@ -16,7 +16,7 @@ class AppRouter {
       case TaskListScreen.id:
         return _getTaskListScreen();
       case AddEditScreen.id:
-        return _getAddEditScreen();
+        return _getAddEditScreen(settings);
       case FilterScreen.id:
         return _getFilterScreen();
       case TaskDetailsScreen.id:
@@ -41,12 +41,15 @@ class AppRouter {
     );
   }
 
-  MaterialPageRoute _getAddEditScreen() {
+  MaterialPageRoute _getAddEditScreen(RouteSettings settings) {
+    Object? arguments = settings.arguments;
+    TaskModel? taskModel = arguments != null ? arguments as TaskModel : null;
+
     return MaterialPageRoute(
         builder: (_) =>
             BlocProvider.value(
               value: GetIt.instance.get<AddEditTaskBloc>(),
-              child: AddEditScreen(),
+              child: AddEditScreen(taskModel: taskModel,),
             )
     );
   }

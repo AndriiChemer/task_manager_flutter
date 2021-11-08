@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_task_manager/core/routes/navigation.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
 import 'package:flutter_task_manager/core/utils/utils.dart';
 import 'package:flutter_task_manager/features/data/models/task/task_model.dart';
 import 'package:flutter_task_manager/features/presentation/blocs/blocs.dart';
 import 'package:flutter_task_manager/features/presentation/screens/screens.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/widgets.dart';
+import 'package:get_it/get_it.dart';
 
 class TaskDetailsScreen extends HookWidget {
   static const String id = "/task_details";
@@ -17,7 +19,7 @@ class TaskDetailsScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
 
-    useEffect(() {
+    useMemoized(() {
       BlocProvider.of<ShowTaskCubit>(context).showTaskDetails(taskModel);
     });
 
@@ -114,25 +116,11 @@ class AppBarDetails extends StatelessWidget {
   }
 
   void _openEditTaskScreen(BuildContext context) async {
-    var taskBloc = BlocProvider.of<ShowTaskCubit>(context);
-    var taskListBloc = BlocProvider.of<TaskListBloc>(context);
-    var addEditTaskBloc = BlocProvider.of<AddEditTaskBloc>(context);
-    var editTaskScreen = AddEditScreen(taskModel: taskModel);
+    final updatedTaskModel = await GetIt.instance.get<NavigationService>()
+        .navigateTo(AddEditScreen.id, taskModel);
 
-    var provides = MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: taskListBloc),
-        BlocProvider.value(value: addEditTaskBloc),
-      ],
-      child: editTaskScreen,
-    );
-
-    var updatedTaskModel = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => provides),
-    );
-
-    taskBloc.showTaskDetails(updatedTaskModel);
+    BlocProvider.of<ShowTaskCubit>(context)
+        .showTaskDetails(updatedTaskModel);
   }
 }
 
