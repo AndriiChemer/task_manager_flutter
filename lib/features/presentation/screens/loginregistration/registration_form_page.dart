@@ -1,19 +1,24 @@
 part of 'login_registration_screen.dart';
 
-class RegistrationFormPage extends StatefulWidget {
-  @override
-  _RegistrationFormPageState createState() => _RegistrationFormPageState();
-}
-
-class _RegistrationFormPageState extends State<RegistrationFormPage> {
-  final _formKey = GlobalKey<FormState>();
-
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+class RegistrationFormPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var topSpaceHeight = MediaQuery.of(context).size.height / 6;
+    final topSpaceHeight = MediaQuery.of(context).size.height / 6;
+    final emailController = useTextEditingController();
+    final passwordController = useTextEditingController();
+    final _formKey = GlobalKey<FormState>();
+
+    final _onSubmit = useMemoized( () => () {
+        if (_formKey.currentState!.validate()) {
+          var email = emailController.text;
+          var password = passwordController.text;
+
+          BlocProvider.of<AuthBloc>(context).onRegistrationClicked(email, password);
+        }
+      },
+      [_formKey],
+    );
 
     return Form(
       key: _formKey,
@@ -22,13 +27,13 @@ class _RegistrationFormPageState extends State<RegistrationFormPage> {
           SizedBox(height: topSpaceHeight,),
           _buildTitle(context),
           SizedBox(height: 20,),
-          _buildEmailTextField(context),
+          _buildEmailTextField(context, emailController),
           SizedBox(height: 10,),
-          _buildPasswordTextField(context),
+          _buildPasswordTextField(context, passwordController),
           SizedBox(height: 10,),
           _buildCredentialSwitch(context),
           SizedBox(height: 10,),
-          _buildRegistrationButton(context),
+          _buildRegistrationButton(context, _onSubmit),
         ],
       ),
     );
@@ -42,7 +47,7 @@ class _RegistrationFormPageState extends State<RegistrationFormPage> {
     );
   }
 
-  Widget _buildEmailTextField(BuildContext context) {
+  Widget _buildEmailTextField(BuildContext context, TextEditingController emailController) {
     return CustomTextFormWidget(
       controller: emailController,
       validator: Validator.emailValidator,
@@ -50,7 +55,7 @@ class _RegistrationFormPageState extends State<RegistrationFormPage> {
     );
   }
 
-  Widget _buildPasswordTextField(BuildContext context) {
+  Widget _buildPasswordTextField(BuildContext context, TextEditingController passwordController) {
     return BlocProvider(
       create: (_) => VisibilityPasswordBloc(),
       child: CustomTextFormWidget(
@@ -81,30 +86,10 @@ class _RegistrationFormPageState extends State<RegistrationFormPage> {
     );
   }
 
-  Widget _buildRegistrationButton(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
-          var isLoading = state is LoadingState;
-
-          return ButtonWidget(
-            textColor: Colors.white,
-            buttonColor: Theme.of(context).iconTheme.color,
-            isLoading: isLoading,
-            title: context.getString("registration_button"),
-            onPressed: () {
-              _onRegistrationButtonClick(context);
-            },
-          );
-        });
-  }
-
-  void _onRegistrationButtonClick(BuildContext context) {
-    if (_formKey.currentState!.validate()) {
-
-      var email = emailController.text;
-      var password = passwordController.text;
-
-      BlocProvider.of<AuthBloc>(context).onRegistrationClicked(email, password);
-    }
+  Widget _buildRegistrationButton(BuildContext context, Null Function() onSubmit) {
+    return LogoutButton(
+      context.getString("registration_button"),
+      () => onSubmit.call()
+    );
   }
 }

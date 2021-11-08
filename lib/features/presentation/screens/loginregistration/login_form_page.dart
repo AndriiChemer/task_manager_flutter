@@ -1,19 +1,22 @@
 part of 'login_registration_screen.dart';
 
-class LoginFormPage extends StatefulWidget {
-  @override
-  _LoginFormPageState createState() => _LoginFormPageState();
-}
-
-class _LoginFormPageState extends State<LoginFormPage> {
-  final _formKey = GlobalKey<FormState>();
-
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+class LoginFormPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var topSpaceHeight = MediaQuery.of(context).size.height / 6;
+    final topSpaceHeight = MediaQuery.of(context).size.height / 6;
+    final emailController = useTextEditingController();
+    final passwordController = useTextEditingController();
+    final _formKey = GlobalKey<FormState>();
+
+    var onLoginClickCallback = useCallback(() {
+      if (_formKey.currentState!.validate()) {
+        var email = emailController.text;
+        var password = passwordController.text;
+
+        BlocProvider.of<AuthBloc>(context).onSignInClicked(email, password);
+      }
+    }, [_formKey]);
 
     return Form(
       key: _formKey,
@@ -22,13 +25,13 @@ class _LoginFormPageState extends State<LoginFormPage> {
           SizedBox(height: topSpaceHeight,),
           _buildTitle(context),
           SizedBox(height: 20,),
-          _buildEmailTextField(context),
+          _buildEmailTextField(context, emailController),
           SizedBox(height: 10,),
-          _buildPasswordTextField(context),
+          _buildPasswordTextField(context, passwordController),
           SizedBox(height: 10,),
           _buildCredentialSwitch(context),
           SizedBox(height: 10,),
-          _buildSignInButton(context),
+          _buildSignInButton(context, onLoginClickCallback),
         ],
       ),
     );
@@ -42,7 +45,7 @@ class _LoginFormPageState extends State<LoginFormPage> {
     );
   }
 
-  Widget _buildEmailTextField(BuildContext context) {
+  Widget _buildEmailTextField(BuildContext context, TextEditingController emailController) {
     return CustomTextFormWidget(
       controller: emailController,
       validator: Validator.emailValidator,
@@ -50,7 +53,7 @@ class _LoginFormPageState extends State<LoginFormPage> {
     );
   }
 
-  Widget _buildPasswordTextField(BuildContext context) {
+  Widget _buildPasswordTextField(BuildContext context, TextEditingController passwordController) {
     return BlocProvider(
       create: (_) => VisibilityPasswordBloc(),
       child: CustomTextFormWidget(
@@ -72,46 +75,21 @@ class _LoginFormPageState extends State<LoginFormPage> {
         ),
 
         Switch(
-            value: false,
-            onChanged: (value) {
-              BlocProvider.of<CredentialTypeCubit>(context).switchCredentialType();
-            }
+          value: false,
+          onChanged: (value) {
+            BlocProvider.of<CredentialTypeCubit>(context).switchCredentialType();
+          }
         )
       ],
     );
   }
 
-  Widget _buildSignInButton(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
-          var isLoading = state is LoadingState;
-
-          return ButtonWidget(
-            textColor: Colors.white,
-            buttonColor: Theme.of(context).iconTheme.color,
-            isLoading: isLoading,
-            title: context.getString("login_button"),
-            onPressed: () {
-              _onSingInButtonClick(context);
-            },
-          );
-        });
-  }
-
-  void _onSingInButtonClick(BuildContext context) {
-    if (_formKey.currentState!.validate()) {
-
-      var email = emailController.text;
-      var password = passwordController.text;
-
-      BlocProvider.of<AuthBloc>(context).onSignInClicked(email, password);
-    }
-  }
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
+  Widget _buildSignInButton(BuildContext context, Function() onSubmit) {
+    return LogoutButton(
+      context.getString("login_button"),
+      () => onSubmit()
+    );
   }
 }
+
+

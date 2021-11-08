@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
 import 'package:flutter_task_manager/core/utils/utils.dart';
 import 'package:flutter_task_manager/features/data/models/task/task_model.dart';
@@ -7,26 +8,19 @@ import 'package:flutter_task_manager/features/presentation/blocs/blocs.dart';
 import 'package:flutter_task_manager/features/presentation/screens/screens.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/widgets.dart';
 
-class TaskDetailsScreen extends StatefulWidget {
+class TaskDetailsScreen extends HookWidget {
   static const String id = "/task_details";
-  final TaskModel taskModel;
 
+  final TaskModel taskModel;
   const TaskDetailsScreen(this.taskModel);
 
   @override
-  _TaskDetailsScreenState createState() => _TaskDetailsScreenState();
-}
-
-class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
-
-  @override
-  void initState() {
-    BlocProvider.of<ShowTaskCubit>(context).showTaskDetails(widget.taskModel);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+
+    useEffect(() {
+      BlocProvider.of<ShowTaskCubit>(context).showTaskDetails(taskModel);
+    });
+
     return BlocBuilder<ShowTaskCubit, ShowTaskState>(
       builder: (context, state) {
         if(state is ShowTaskDetail) {

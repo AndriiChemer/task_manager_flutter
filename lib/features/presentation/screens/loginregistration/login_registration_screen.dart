@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_task_manager/core/routes/navigation.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
 import 'package:flutter_task_manager/core/utils/utils.dart';
@@ -19,22 +20,17 @@ class LoginRegistrationScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if(state is SuccessState) {
-              _openTaskListScreen();
-            } else if(state is FailState) {
-              _showErrorDialogMessage(context, state.message);
-            }
-          },
+          listener: _listenAuthState,
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.only(left: 40, right: 40,),
               child: BlocBuilder<CredentialTypeCubit, CredentialTypeState>(
                   builder: (context, state) {
+                    print("state: $state");
                     if (state is LoginState) {
-                      return _buildLoginForm();
+                      return LoginFormPage();
                     } else if (state is RegistrationState) {
-                      return _buildRegistrationForm();
+                      return RegistrationFormPage();
                     } else {
                       return Container();
                     }
@@ -47,20 +43,41 @@ class LoginRegistrationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLoginForm() {
-    return LoginFormPage();
-  }
-
-  Widget _buildRegistrationForm() {
-    return RegistrationFormPage();
-  }
-
-  void _showErrorDialogMessage(BuildContext context, String message) {
-    context.showNegativeMessage(message);
-  }
-
   void _openTaskListScreen() {
     GetIt.instance.get<NavigationService>()
         .pushReplacement(LoginRegistrationScreen.id);
+  }
+
+  void _listenAuthState(BuildContext context, AuthState state) {
+    if(state is SuccessState) {
+      _openTaskListScreen();
+    } else if(state is FailState) {
+      context.showNegativeMessage(state.message);
+    }
+  }
+}
+
+class LogoutButton extends HookWidget {
+  final String title;
+  final Function callback;
+
+  const LogoutButton(this.title, this.callback);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          var isLoading = state is LoadingState;
+
+          return ButtonWidget(
+            textColor: Colors.white,
+            buttonColor: Theme.of(context).iconTheme.color,
+            isLoading: isLoading,
+            title: title,
+            onPressed: () {
+              callback.call();
+            },
+          );
+        });
   }
 }
