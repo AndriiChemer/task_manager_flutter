@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class SelectDateCubit extends Cubit<DateTime?> {
-  SelectDateCubit() : super(null);
+  SelectDateCubit({DateTime? initialDateTile}) : super(initialDateTile);
 
   void setTimeStamp(int dateTime) {
     var date = new DateTime.fromMillisecondsSinceEpoch(dateTime * 1000);

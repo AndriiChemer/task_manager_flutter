@@ -21,7 +21,7 @@ class ToggleBloc extends Bloc<ToggleEvent, ToggleState> {
   Stream<ToggleState> _mapReloadedState(ToggleButtonClick event) async* {
     var selectedIndex = event.selectedIndex;
 
-    Map<int, bool> items = state.items;
+    Map<int, bool> items = state.indexItems;
     Map<int, bool> reloadedItems = {};
 
     items.entries.forEach((element) {

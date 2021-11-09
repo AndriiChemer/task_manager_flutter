@@ -1,36 +1,28 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'bloc/toggle_bloc.dart';
 
-class ToggleWidget extends StatefulWidget {
+class ToggleWidget extends HookWidget {
   final String? initialItem;
   final List<String> items;
   final BehaviorSubject<String?>? controller;
 
-  const ToggleWidget({Key? key, required this.items, this.initialItem, this.controller}) : super(key: key);
+  ToggleWidget({
+    Key? key,
+    required this.items,
+    this.initialItem,
+    this.controller}) : super(key: key) {
 
-  @override
-  _ToggleWidgetState createState() => _ToggleWidgetState();
-}
-
-class _ToggleWidgetState extends State<ToggleWidget> {
-  
-  late ToggleBloc _toggleBloc;
-
-  @override
-  void initState() {
-    _toggleBloc = ToggleBloc(items: widget.items, initialItem: widget.initialItem);
-    widget.controller?.add(widget.initialItem);
-    super.initState();
+    controller?.add(initialItem);
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    double itemWidth = _getItemWidth();
+    final itemWidth = useMemoized(() => _getItemWidth(context));
+    final _toggleBloc = useMemoized(() => ToggleBloc(items: items, initialItem: initialItem));
 
     return BlocProvider(
       create: (_) => _toggleBloc,
@@ -38,12 +30,12 @@ class _ToggleWidgetState extends State<ToggleWidget> {
         child: BlocBuilder<ToggleBloc, ToggleState>(
           builder: (context, state) {
 
-            _setItemSelected(state.items);
-            List<Widget> buttons = convertMapItemsToWidgets(state.items, itemWidth);
+            _showSelectedItem(state.indexItems);
+            List<Widget> buttons = _convertMapItemsToWidgets(state.indexItems, itemWidth);
 
             return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: buttons
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: buttons
             );
           },
         ),
@@ -51,13 +43,26 @@ class _ToggleWidgetState extends State<ToggleWidget> {
     );
   }
 
-  List<Widget> convertMapItemsToWidgets(Map<int, bool> items, double itemWidth) {
-    List<Widget> buttons = items.entries.map((mapItem) =>
+  void _showSelectedItem(Map<int, bool> indexItems) {
+    final containSelectedIndex = indexItems.entries.contains(true);
 
-        ToggleItem(index: mapItem.key,
-            title: widget.items[mapItem.key],
-            isSelected: mapItem.value,
-            itemWidth: itemWidth
+    if(containSelectedIndex) {
+      final selectedIndex = indexItems.entries
+          .firstWhere((item) => item.value == true).key;
+
+      final selectedItemTitle = items[selectedIndex];
+      controller?.add(selectedItemTitle);
+    }
+  }
+
+  List<Widget> _convertMapItemsToWidgets(Map<int, bool> indexItems, double itemWidth) {
+    List<Widget> buttons = indexItems.entries.map((indexItem) =>
+
+        ToggleItem(
+          index: indexItem.key,
+          title: items[indexItem.key],
+          isSelected: indexItem.value,
+          itemWidth: itemWidth
         )
 
     ).toList();
@@ -65,33 +70,11 @@ class _ToggleWidgetState extends State<ToggleWidget> {
     return buttons;
   }
 
-  double _getItemWidth() {
-    var itemCount = widget.items.length + 0.7;
+  double _getItemWidth(BuildContext context) {
+    var itemCount = items.length + 0.7;
     var screenSize = MediaQuery.of(context).size;
     return screenSize.width / itemCount;
   }
-
-  void _setItemSelected(Map<int, bool> items) {
-    var selectedIndex = _getSelectedIndex(items);
-    
-    if(selectedIndex != null) {
-      var selectedItemTitle = widget.items[selectedIndex];
-      widget.controller?.add(selectedItemTitle);
-    } else {
-      widget.controller?.add(null);
-    }
-  }
-  
-  int? _getSelectedIndex(Map<int, bool> items) {
-    for(var item in items.entries) {
-      if(item.value) {
-        return item.key;
-      }
-    }
-
-    return null;
-  }
-  
 }
 
 class ToggleItem extends StatelessWidget {
@@ -101,11 +84,17 @@ class ToggleItem extends StatelessWidget {
   final double? itemWidth;
   final double? itemHeight;
 
-  ToggleItem({Key? key, required this.title, required this.isSelected, this.itemWidth, this.itemHeight, required this.index});
+  ToggleItem({
+    Key? key,
+    required this.title,
+    required this.isSelected,
+    this.itemWidth,
+    this.itemHeight,
+    required this.index});
 
   @override
   Widget build(BuildContext context) {
-    var borderColor = Theme.of(context).appBarTheme.color ?? Colors.black;
+    var borderColor = Theme.of(context).appBarTheme.backgroundColor ?? Colors.black;
     var textColor = isSelected ? Colors.white : Theme.of(context).iconTheme.color;
     var backgroundColor = isSelected ? borderColor : Colors.white;
 
