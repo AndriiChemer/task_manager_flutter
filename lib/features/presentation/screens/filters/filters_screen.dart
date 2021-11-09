@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
-import 'package:flutter_task_manager/features/presentation/blocs/blocs.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/widgets.dart';
 
 class FilterScreen extends StatelessWidget {
@@ -15,49 +14,38 @@ class FilterScreen extends StatelessWidget {
         child: SettingsAppBar(),
       ),
       body: SafeArea(
-        child: BlocBuilder<FilterCubit, FilterState>(
-          builder: (context, state) {
-            if(state is FilterLoaded) {
+        child: Column(
+          children: [
 
-              var filterModel = state.filtersModel;
+            // FilterPopupItem(
+            //     icon: Icon(Icons.sort, size: 30,),
+            //     text:filterModel.sortBy,
+            //     items: filterModel.sortByItems,
+            //     onItemSelected: onFilterTypeSelected
+            // ),
 
-              return Column(
-                children: [
+            // FilterPopupItem(
+            //     icon: RotatedBox(
+            //         quarterTurns: 1,
+            //         child: Icon(Icons.compare_arrows, size: 30,)
+            //     ),
+            //     text: filterModel.orderBy,
+            //     items: filterModel.orderByItems,
+            //     onItemSelected: onSortingTypeSelected
+            // ),
 
-                  FilterPopupItem(
-                      icon: Icon(Icons.sort, size: 30,),
-                      text:filterModel.sortBy,
-                      items: filterModel.sortByItems,
-                      onItemSelected: onFilterTypeSelected
-                  ),
-
-                  FilterPopupItem(
-                      icon: RotatedBox(
-                          quarterTurns: 1,
-                          child: Icon(Icons.compare_arrows, size: 30,)
-                      ),
-                      text: filterModel.orderBy,
-                      items: filterModel.orderByItems,
-                      onItemSelected: onSortingTypeSelected
-                  ),
-
-                ],
-              );
-            } else {
-              return Container();
-            }
-          }
+          ],
         ),
       ),
     );
   }
 
   void onFilterTypeSelected(BuildContext context, String value) {
-    BlocProvider.of<FilterCubit>(context).setSortBy(value);
+    // BlocProvider.of<FilterCubit>(context).setSortBy(value);
   }
 
   void onSortingTypeSelected(BuildContext context, String value) {
-    BlocProvider.of<FilterCubit>(context).setOrderBy(value);
+    // BlocProvider.of<FilterCubit>(context).setOrderBy(value);
   }
 }
 

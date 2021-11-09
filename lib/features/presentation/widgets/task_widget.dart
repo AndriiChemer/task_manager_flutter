@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_task_manager/core/routes/navigation.dart';
 import 'package:flutter_task_manager/core/utils/utils.dart';
-import 'package:flutter_task_manager/features/data/models/models.dart';
-import 'package:flutter_task_manager/features/presentation/screens/screens.dart';
+import 'package:flutter_task_manager/features/domain/task/model/task.dart';
+import 'package:flutter_task_manager/features/presentation/screens/taskdetails/task_details_page.dart';
 import 'package:get_it/get_it.dart';
 
 class TaskWidget extends StatelessWidget {
 
-  final TaskModel taskModel;
+  final Task taskModel;
   final double height;
 
   const TaskWidget({Key? key, required this.taskModel, this.height = 76}) : super(key: key);
@@ -22,7 +22,7 @@ class TaskWidget extends StatelessWidget {
 
     var dueByString = DateTimeUtils.listItemTimeStampConvert(taskModel.dueBy);
 
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         _openDetailScreen(context);
       },
@@ -94,6 +94,6 @@ class TaskWidget extends StatelessWidget {
 
   void _openDetailScreen(BuildContext context) {
     GetIt.instance.get<NavigationService>()
-        .navigateTo(TaskDetailsScreen.id, taskModel);
+        .navigateTo(TaskDetailsPage.id, taskModel);
   }
 }

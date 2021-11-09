@@ -1,73 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:rxdart/rxdart.dart';
-
-import 'bloc/toggle_bloc.dart';
 
 class ToggleWidget extends HookWidget {
   final String? initialItem;
   final List<String> items;
-  final BehaviorSubject<String?>? controller;
+  final String? error;
+  final EdgeInsetsGeometry? margin;
+  final ValueNotifier<String?> controller;
 
   ToggleWidget({
     Key? key,
     required this.items,
     this.initialItem,
-    this.controller}) : super(key: key) {
-
-    controller?.add(initialItem);
+    this.margin,
+    this.error,
+    required this.controller
+  }) : super(key: key) {
+    controller.value = initialItem;
   }
 
   @override
   Widget build(BuildContext context) {
     final itemWidth = useMemoized(() => _getItemWidth(context));
-    final _toggleBloc = useMemoized(() => ToggleBloc(items: items, initialItem: initialItem));
 
-    return BlocProvider(
-      create: (_) => _toggleBloc,
-      child: Container(
-        child: BlocBuilder<ToggleBloc, ToggleState>(
-          builder: (context, state) {
-
-            _showSelectedItem(state.indexItems);
-            List<Widget> buttons = _convertMapItemsToWidgets(state.indexItems, itemWidth);
-
-            return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: buttons
-            );
-          },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.all(5),
+          decoration: error != null ? BoxDecoration(
+              border: Border.all(
+                color: Colors.red,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(5))
+          ) : null,
+          margin: margin,
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: items.map((item) =>
+                  ToggleItem(
+                    title: item,
+                    isSelected: item == controller.value,
+                    itemWidth: itemWidth,
+                    onItemClick: (String value) {
+                      controller.value = value;
+                    },
+                  )
+              ).toList()
+          ),
         ),
-      ),
+
+        if(error != null) ...[
+          Container(
+            margin: EdgeInsets.only(left: 30),
+            child: Text(error!, style: TextStyle(color: Colors.red, fontSize: 11),)
+          )
+        ]
+      ],
     );
-  }
-
-  void _showSelectedItem(Map<int, bool> indexItems) {
-    final containSelectedIndex = indexItems.entries.contains(true);
-
-    if(containSelectedIndex) {
-      final selectedIndex = indexItems.entries
-          .firstWhere((item) => item.value == true).key;
-
-      final selectedItemTitle = items[selectedIndex];
-      controller?.add(selectedItemTitle);
-    }
-  }
-
-  List<Widget> _convertMapItemsToWidgets(Map<int, bool> indexItems, double itemWidth) {
-    List<Widget> buttons = indexItems.entries.map((indexItem) =>
-
-        ToggleItem(
-          index: indexItem.key,
-          title: items[indexItem.key],
-          isSelected: indexItem.value,
-          itemWidth: itemWidth
-        )
-
-    ).toList();
-
-    return buttons;
   }
 
   double _getItemWidth(BuildContext context) {
@@ -80,17 +70,17 @@ class ToggleWidget extends HookWidget {
 class ToggleItem extends StatelessWidget {
   final String title;
   final bool isSelected;
-  final int index;
   final double? itemWidth;
   final double? itemHeight;
+  final Function(String value) onItemClick;
 
   ToggleItem({
     Key? key,
     required this.title,
     required this.isSelected,
+    required this.onItemClick,
     this.itemWidth,
-    this.itemHeight,
-    required this.index});
+    this.itemHeight});
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +90,7 @@ class ToggleItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        _onButtonClick(context);
+        onItemClick(title);
       },
       child: Container(
         width: itemWidth,
@@ -121,10 +111,6 @@ class ToggleItem extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _onButtonClick(BuildContext context) {
-    BlocProvider.of<ToggleBloc>(context).add(ToggleButtonClick(index));
   }
 }
 

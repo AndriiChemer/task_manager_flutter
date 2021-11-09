@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_task_manager/features/data/models/models.dart';
-import 'package:flutter_task_manager/features/presentation/blocs/blocs.dart';
-import 'package:flutter_task_manager/features/presentation/screens/screens.dart';
+import 'package:flutter_task_manager/features/domain/task/model/task.dart';
+import 'package:flutter_task_manager/features/presentation/screens/addedittask/add_edit_task_page.dart';
+import 'package:flutter_task_manager/features/presentation/screens/auth/auth_page.dart';
+import 'package:flutter_task_manager/features/presentation/screens/filters/filters_screen.dart';
+import 'package:flutter_task_manager/features/presentation/screens/taskdetails/task_details_page.dart';
+import 'package:flutter_task_manager/features/presentation/screens/tasklist/task_list_page.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
@@ -11,82 +14,31 @@ class AppRouter {
 
   Route generateRoute(RouteSettings settings) {
     switch(settings.name) {
-      case LoginRegistrationScreen.id:
-        return _getLoginRegistrationScreen();
+      case AuthPage.id:
+        return MaterialPageRoute(builder: (_) => AuthPage());
       case TaskListScreen.id:
-        return _getTaskListScreen();
-      case AddEditScreen.id:
+        return MaterialPageRoute(builder: (_) => TaskListScreen());
+      case AddEditTaskPage.id:
         return _getAddEditScreen(settings);
       case FilterScreen.id:
-        return _getFilterScreen();
-      case TaskDetailsScreen.id:
+        return MaterialPageRoute(builder: (_) => FilterScreen());
+      case TaskDetailsPage.id:
         return _getTaskDetailsScreen(settings);
       default:
-        return _getTaskListScreen();
+        return MaterialPageRoute(builder: (_) => TaskListScreen());
     }
   }
 
   MaterialPageRoute _getTaskDetailsScreen(RouteSettings settings) {
-    TaskModel taskModel = settings.arguments as TaskModel;
+    Task taskModel = settings.arguments as Task;
 
-    return MaterialPageRoute(
-        builder: (_) => MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: GetIt.instance.get<ShowTaskCubit>(),),
-            BlocProvider.value(value: GetIt.instance.get<AddEditTaskBloc>(),),
-            BlocProvider.value(value: GetIt.instance.get<TaskListBloc>(),),
-          ],
-          child: TaskDetailsScreen(taskModel),
-        )
-    );
+    return MaterialPageRoute(builder: (_) => TaskDetailsPage(taskModel));
   }
 
   MaterialPageRoute _getAddEditScreen(RouteSettings settings) {
     Object? arguments = settings.arguments;
-    TaskModel? taskModel = arguments != null ? arguments as TaskModel : null;
+    Task? taskModel = arguments != null ? arguments as Task : null;
 
-    return MaterialPageRoute(
-        builder: (_) =>
-            BlocProvider.value(
-              value: GetIt.instance.get<AddEditTaskBloc>(),
-              child: AddEditScreen(taskModel: taskModel,),
-            )
-    );
-  }
-
-  MaterialPageRoute _getTaskListScreen() {
-    return MaterialPageRoute(
-        builder: (_) => MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: GetIt.instance.get<AuthStateCubit>(),),
-            BlocProvider.value(value: GetIt.instance.get<TaskListBloc>(),),
-            BlocProvider.value(value: GetIt.instance.get<AddEditTaskBloc>(),),
-          ],
-          child: TaskListScreen(),
-        )
-    );
-  }
-
-  MaterialPageRoute _getLoginRegistrationScreen() {
-    return MaterialPageRoute(
-        builder: (_) => MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (_) => GetIt.instance.get<CredentialTypeCubit>()),
-            BlocProvider(create: (_) => GetIt.instance.get<AuthBloc>())
-          ],
-          child: LoginRegistrationScreen(),
-        )
-    );
-  }
-
-  MaterialPageRoute _getFilterScreen() {
-    return MaterialPageRoute(
-        builder: (_) => MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: GetIt.instance.get<FilterCubit>()),
-          ],
-          child: FilterScreen(),
-        )
-    );
+    return MaterialPageRoute(builder: (_) => AddEditTaskPage(taskModel: taskModel,));
   }
 }

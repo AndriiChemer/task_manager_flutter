@@ -4,95 +4,118 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
+import 'package:dio/dio.dart' as _i16;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
-import 'package:shared_preferences/shared_preferences.dart' as _i18;
+import 'package:shared_preferences/shared_preferences.dart' as _i10;
 
-import '../core/routes/navigation.dart' as _i14;
-import '../core/routes/router.dart' as _i6;
-import '../core/notifiers/auth_notifier.dart' as _i8;
-import '../core/notifiers/notifiers.dart' as _i10;
-import '../core/preferences/preferences.dart' as _i13;
-import '../core/preferences/shared_preference_module.dart' as _i32;
-import 'data/datasources/remote/remote_data_source.dart' as _i15;
-import 'data/datasources/remote/remote_data_source_impl.dart' as _i16;
-import 'data/repositories/task_repository_impl.dart' as _i22;
-import 'data/repositories/user_repository_impl.dart' as _i24;
-import 'domain/repositories/repositories.dart' as _i21;
-import 'domain/usecases/auth/auth_user_usecase.dart' as _i26;
-import 'domain/usecases/auth/create_user_usecase.dart' as _i28;
-import 'domain/usecases/tasks/create_task_usecase.dart' as _i27;
-import 'domain/usecases/tasks/delete_task_usecase.dart' as _i29;
-import 'domain/usecases/tasks/get_task_by_id_usecase.dart' as _i30;
-import 'domain/usecases/tasks/get_task_list_use_case.dart' as _i31;
-import 'domain/usecases/tasks/update_task_usecase.dart' as _i23;
-import 'domain/usecases/usecases.dart' as _i5;
-import 'presentation/blocs/addedittaskbloc/add_edit_task_bloc.dart' as _i3;
-import 'presentation/blocs/authbloc/auth_bloc.dart' as _i7;
-import 'presentation/blocs/authstayloggedincubit/auth_stay_logged_in_cubit.dart'
-    as _i9;
-import 'presentation/blocs/blocs.dart' as _i4;
-import 'presentation/blocs/credentialtype/credential_type_cubit.dart' as _i11;
-import 'presentation/blocs/filtercubit/filter_cubit.dart' as _i12;
-import 'presentation/blocs/selectdate/select_date_cubit.dart' as _i17;
-import 'presentation/blocs/showtaskcubit/show_task_cubit.dart' as _i19;
-import 'presentation/blocs/tasklistbloc/task_list_bloc.dart' as _i20;
-import 'presentation/blocs/visibilitypassword/visibility_password_bloc.dart'
-    as _i25; // ignore_for_file: unnecessary_lambdas
+import '../core/di/network_module.dart' as _i38;
+import '../core/di/storage_module.dart' as _i37;
+import '../core/notifiers/auth_notifier.dart' as _i4;
+import '../core/preferences/preferences.dart' as _i21;
+import '../core/routes/navigation.dart' as _i8;
+import '../core/routes/router.dart' as _i3;
+import 'data/auth/api/auth_api_data_source.dart' as _i18;
+import 'data/auth/auth_repository_impl.dart' as _i20;
+import 'data/auth/auth_storage_impl.dart' as _i13;
+import 'data/network/interceptors/auth_token_interceptor.dart' as _i15;
+import 'data/network/interceptors/content_type_interceptor.dart' as _i5;
+import 'data/network/interceptors/error_interceptor.dart' as _i7;
+import 'data/network/task_manager_dio.dart' as _i17;
+import 'data/task/api/models/pagination/pagination_response.dart' as _i9;
+import 'data/task/api/models/task/task_response.dart' as _i11;
+import 'data/task/api/task_api_data_source.dart' as _i26;
+import 'data/task/task_repository_impl.dart' as _i28;
+import 'domain/auth/auth_repository.dart' as _i19;
+import 'domain/auth/auth_store.dart' as _i12;
+import 'domain/auth/use_case/auth_user_usecase.dart' as _i22;
+import 'domain/auth/use_case/create_user_usecase.dart' as _i23;
+import 'domain/auth/use_case/get_token_usecase.dart' as _i14;
+import 'domain/task/notifiers/delete_task_notifier.dart' as _i6;
+import 'domain/task/task_repository.dart' as _i27;
+import 'domain/task/use_case/create_task_usecase.dart' as _i30;
+import 'domain/task/use_case/delete_task_usecase.dart' as _i31;
+import 'domain/task/use_case/get_task_by_id_usecase.dart' as _i32;
+import 'domain/task/use_case/get_task_list_use_case.dart' as _i33;
+import 'domain/task/use_case/update_task_usecase.dart' as _i29;
+import 'presentation/screens/addedittask/add_edit_task_page_cubit.dart' as _i35;
+import 'presentation/screens/auth/login/login_form_page_cubit.dart' as _i24;
+import 'presentation/screens/auth/registration/registration_form_page_cubit.dart'
+    as _i25;
+import 'presentation/screens/taskdetails/task_details_page_cubit.dart' as _i36;
+import 'presentation/screens/tasklist/task_list_page_cubit.dart'
+    as _i34; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
 Future<_i1.GetIt> $initGetIt(_i1.GetIt get,
     {String? environment, _i2.EnvironmentFilter? environmentFilter}) async {
   final gh = _i2.GetItHelper(get, environment, environmentFilter);
-  final sharedPreferenceModule = _$SharedPreferenceModule();
-  gh.lazySingleton<_i3.AddEditTaskBloc>(() => _i3.AddEditTaskBloc(
-      tasksBloc: get<_i4.TaskListBloc>(),
-      createTaskUseCase: get<_i5.CreateTaskUseCase>(),
-      updateTaskUseCase: get<_i5.UpdateTaskUseCase>()));
-  gh.lazySingleton<_i6.AppRouter>(() => _i6.AppRouter());
-  gh.factory<_i7.AuthBloc>(() => _i7.AuthBloc(
-      createUserUseCase: get<_i5.CreateUserUseCase>(),
-      authUserUseCase: get<_i5.AuthUserUseCase>()));
-  gh.singleton<_i8.AuthNotifier>(_i8.AuthNotifier());
-  gh.factory<_i9.AuthStateCubit>(
-      () => _i9.AuthStateCubit(authNotifier: get<_i10.AuthNotifier>()));
-  gh.factory<_i11.CredentialTypeCubit>(() => _i11.CredentialTypeCubit());
-  gh.factory<_i12.FilterCubit>(
-      () => _i12.FilterCubit(get<_i13.FiltersPreferences>()));
-  gh.lazySingleton<_i14.NavigationService>(() => _i14.NavigationService());
-  gh.lazySingleton<_i15.RemoteDataSource>(
-      () => _i16.RemoteDataSourceImpl(get<_i10.AuthNotifier>()));
-  gh.factory<_i17.SelectDateCubit>(() => _i17.SelectDateCubit());
-  await gh.factoryAsync<_i18.SharedPreferences>(
-      () => sharedPreferenceModule.prefs,
+  final storageModule = _$StorageModule();
+  final networkModule = _$NetworkModule();
+  gh.lazySingleton<_i3.AppRouter>(() => _i3.AppRouter());
+  gh.singleton<_i4.AuthNotifier>(_i4.AuthNotifier());
+  gh.factory<_i5.ContentTypeInterceptor>(() => _i5.ContentTypeInterceptor());
+  gh.lazySingleton<_i6.DeleteTaskNotifier>(() => _i6.DeleteTaskNotifier());
+  gh.factory<_i7.ErrorInterceptor>(
+      () => _i7.ErrorInterceptor(get<_i4.AuthNotifier>()));
+  gh.lazySingleton<_i8.NavigationService>(() => _i8.NavigationService());
+  gh.factory<_i9.PaginationMapper>(() => _i9.PaginationMapper());
+  await gh.factoryAsync<_i10.SharedPreferences>(() => storageModule.prefs,
       preResolve: true);
-  gh.factory<_i19.ShowTaskCubit>(() => _i19.ShowTaskCubit());
-  gh.lazySingleton<_i20.TaskListBloc>(() => _i20.TaskListBloc(
-      getTaskListUseCase: get<_i5.GetTaskListUseCase>(),
-      deleteTaskUseCase: get<_i5.DeleteTaskUseCase>()));
-  gh.lazySingleton<_i21.TaskRepository>(() => _i22.TaskRepositoryImpl(
-      get<_i15.RemoteDataSource>(),
-      get<_i13.AuthPreferences>(),
-      get<_i13.FiltersPreferences>()));
-  gh.singleton<_i23.UpdateTaskUseCase>(
-      _i23.UpdateTaskUseCase(get<_i21.TaskRepository>()));
-  gh.lazySingleton<_i21.UserRepository>(() => _i24.UserRepositoryImpl(
-      get<_i15.RemoteDataSource>(), get<_i13.AuthPreferences>()));
-  gh.factory<_i25.VisibilityPasswordBloc>(() => _i25.VisibilityPasswordBloc());
-  gh.singleton<_i26.AuthUserUseCase>(
-      _i26.AuthUserUseCase(get<_i21.UserRepository>()));
-  gh.singleton<_i27.CreateTaskUseCase>(
-      _i27.CreateTaskUseCase(get<_i21.TaskRepository>()));
-  gh.singleton<_i28.CreateUserUseCase>(
-      _i28.CreateUserUseCase(get<_i21.UserRepository>()));
-  gh.singleton<_i29.DeleteTaskUseCase>(
-      _i29.DeleteTaskUseCase(get<_i21.TaskRepository>()));
-  gh.singleton<_i30.GetTaskByIdUseCase>(
-      _i30.GetTaskByIdUseCase(get<_i21.TaskRepository>()));
-  gh.singleton<_i31.GetTaskListUseCase>(
-      _i31.GetTaskListUseCase(get<_i21.TaskRepository>()));
+  gh.factory<_i11.TaskMapper>(() => _i11.TaskMapper());
+  gh.singleton<_i12.AuthStore>(
+      _i13.AuthStorageImpl(get<_i10.SharedPreferences>()));
+  gh.factory<_i14.GetTokenUseCase>(
+      () => _i14.GetTokenUseCase(get<_i12.AuthStore>()));
+  gh.factory<_i15.AuthTokenInterceptor>(
+      () => _i15.AuthTokenInterceptor(get<_i14.GetTokenUseCase>()));
+  gh.factory<List<_i16.Interceptor>>(() => networkModule.mainInterceptors(
+      get<_i15.AuthTokenInterceptor>(),
+      get<_i5.ContentTypeInterceptor>(),
+      get<_i7.ErrorInterceptor>()));
+  gh.singleton<_i17.TaskManagerDio>(
+      _i17.TaskManagerDio.create(get<List<_i16.Interceptor>>()));
+  gh.singleton<_i18.AuthApiDataSource>(
+      _i18.AuthApiDataSource(get<_i17.TaskManagerDio>()));
+  gh.lazySingleton<_i19.AuthRepository>(() => _i20.UserRepositoryImpl(
+      get<_i18.AuthApiDataSource>(), get<_i21.AuthStorageImpl>()));
+  gh.singleton<_i22.AuthUserUseCase>(
+      _i22.AuthUserUseCase(get<_i19.AuthRepository>()));
+  gh.factory<_i23.CreateUserUseCase>(
+      () => _i23.CreateUserUseCase(get<_i19.AuthRepository>()));
+  gh.factory<_i24.LoginFormPageCubit>(
+      () => _i24.LoginFormPageCubit(get<_i22.AuthUserUseCase>()));
+  gh.factory<_i25.RegistrationFormPageCubit>(
+      () => _i25.RegistrationFormPageCubit(get<_i23.CreateUserUseCase>()));
+  gh.singleton<_i26.TaskApiDataSource>(
+      _i26.TaskApiDataSource(get<_i17.TaskManagerDio>()));
+  gh.lazySingleton<_i27.TaskRepository>(() => _i28.TaskRepositoryImpl(
+      get<_i26.TaskApiDataSource>(),
+      get<_i21.FiltersPreferences>(),
+      get<_i11.TaskMapper>(),
+      get<_i9.PaginationMapper>()));
+  gh.singleton<_i29.UpdateTaskUseCase>(
+      _i29.UpdateTaskUseCase(get<_i27.TaskRepository>()));
+  gh.singleton<_i30.CreateTaskUseCase>(
+      _i30.CreateTaskUseCase(get<_i27.TaskRepository>()));
+  gh.singleton<_i31.DeleteTaskUseCase>(
+      _i31.DeleteTaskUseCase(get<_i27.TaskRepository>()));
+  gh.singleton<_i32.GetTaskByIdUseCase>(
+      _i32.GetTaskByIdUseCase(get<_i27.TaskRepository>()));
+  gh.singleton<_i33.GetTaskListUseCase>(
+      _i33.GetTaskListUseCase(get<_i27.TaskRepository>()));
+  gh.singleton<_i34.TaskListPageCubit>(
+      _i34.TaskListPageCubit(get<_i33.GetTaskListUseCase>()));
+  gh.factory<_i35.AddEditTaskPageCubit>(() => _i35.AddEditTaskPageCubit(
+      get<_i30.CreateTaskUseCase>(),
+      get<_i29.UpdateTaskUseCase>(),
+      get<_i34.TaskListPageCubit>()));
+  gh.factory<_i36.TaskDetailsPageCubit>(() => _i36.TaskDetailsPageCubit(
+      get<_i31.DeleteTaskUseCase>(), get<_i34.TaskListPageCubit>()));
   return get;
 }
 
-class _$SharedPreferenceModule extends _i32.SharedPreferenceModule {}
+class _$StorageModule extends _i37.StorageModule {}
+
+class _$NetworkModule extends _i38.NetworkModule {}

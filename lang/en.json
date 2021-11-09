@@ -23,6 +23,12 @@
   "save_event": "Save event",
   "delete_event": "Delete event",
   "settings": "Settings",
+  "invalid_field": "Invalid field",
+  "invalid_email": "Invalid email",
+  "invalid_password": "Invalid password",
+  "no_internet": "It seems like you have no internet connection",
+  "timeout": "Looks like the server is taking to long to respond, please try again in sometimes",
+  "something_went_wrong": "Something went wrong. Please try again.",
   "task_does_not_have_changes": "Task does not have any changes",
   "fill_in_all_fields": "Please fill in all fields"
 

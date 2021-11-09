@@ -1,77 +1,55 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
-import 'package:flutter_task_manager/features/presentation/blocs/blocs.dart';
 import 'package:intl/intl.dart';
-import 'package:rxdart/rxdart.dart';
+
+const dataFormat = 'dd/MM/yyyy kk:mm';
 
 class SelectDateTimeWidget extends HookWidget {
-  final int? initialTimeStamp;
-  final BehaviorSubject<DateTime?>? controller;
+  final ValueNotifier<int?> controller;
 
   const SelectDateTimeWidget({
     Key? key,
-    this.controller,
-    this.initialTimeStamp}) : super(key: key);
+    required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final initialDateTime = useMemoized(() => initialTimeStamp != null
-        ? DateTime.fromMillisecondsSinceEpoch(initialTimeStamp! * 1000)
-        : null);
+    final formattedDate = useMemoized(() => DateFormat(dataFormat));
 
-    final selectDateCubit = useMemoized(() => SelectDateCubit(initialDateTile: initialDateTime));
-    final formattedDate = useMemoized(() => DateFormat('dd/MM/yyyy kk:mm'));
+    return GestureDetector(
+      onTap: () async {
+        final newDateTime = await _selectNewDateTime(context);
+        if(newDateTime != null) {
+          controller.value = newDateTime.millisecondsSinceEpoch ~/ 1000;
+        }
+      },
 
-    useEffect(() {
-      if(initialDateTime != null) {
-        controller?.add(initialDateTime);
-      }
-    });
+      child: Container(
+        margin: EdgeInsets.all(15.0),
+        child: RichText(
+          text: TextSpan(
+            children: [
 
-
-    return BlocProvider(
-      create: (context) => selectDateCubit,
-
-      child: GestureDetector(
-        onTap: () async {
-          final newDateTime = await _selectNewDateTime(context);
-          if(newDateTime != null) {
-            selectDateCubit.onNewDateSelected(newDateTime);
-            controller?.add(newDateTime);
-          }
-        },
-        child: Container(
-          margin: EdgeInsets.all(15.0),
-          child: BlocBuilder<SelectDateCubit, DateTime?>(
-            builder: (context, state) {
-
-              return RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      style: TextStyle(
-                        color: Theme.of(context).iconTheme.color,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16
-                      ),
-                      text: state != null
-                        ? formattedDate.format(state)
-                        : context.getString("select"),
-                    ),
-                    WidgetSpan(
-                      child: SizedBox(width: 5,),
-                    ),
-                    WidgetSpan(
-                      child: Icon(Icons.arrow_forward_ios_rounded, size: 20,),
-                    ),
-                  ],
+              TextSpan(
+                style: TextStyle(
+                    color: Theme.of(context).iconTheme.color,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16
                 ),
-              );
-            },
+                text: controller.value != null
+                    ? formattedDate.format(DateTime.fromMillisecondsSinceEpoch(controller.value!))
+                    : context.getString("select"),
+              ),
+              WidgetSpan(
+                child: SizedBox(width: 5,),
+              ),
+              WidgetSpan(
+                child: Icon(Icons.arrow_forward_ios_rounded, size: 20,),
+              ),
+            ],
           ),
         ),
       ),
@@ -95,24 +73,133 @@ class SelectDateTimeWidget extends HookWidget {
   }
 
   Future<DateTime?> _getDate(BuildContext context) async {
-    var nowDateTime = DateTime.now();
+    final nowDateTime = DateTime.now();
 
-    final DateTime? selectedDate = await showDatePicker(
-        context: context,
-        initialDate: nowDateTime,
-        initialDatePickerMode: DatePickerMode.day,
-        firstDate: nowDateTime,
-        lastDate: DateTime(nowDateTime.year + 1, nowDateTime.month));
-
+    final DateTime? selectedDate = await showModalBottomSheet<DateTime>(
+      context: context,
+      builder: (context) {
+        DateTime _tempPickedDate = nowDateTime;
+        return Container(
+          height: 250,
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    CupertinoButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    CupertinoButton(
+                      child: Text('Done'),
+                      onPressed: () {
+                        Navigator.of(context).pop(_tempPickedDate);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                height: 0,
+                thickness: 1,
+              ),
+              Expanded(
+                child: Container(
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.date,
+                    initialDateTime: nowDateTime,
+                    minimumDate: nowDateTime,
+                    maximumDate: DateTime(nowDateTime.year + 1, nowDateTime.month),
+                    onDateTimeChanged: (DateTime dateTime) {
+                      _tempPickedDate = dateTime;
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    );
     return selectedDate;
   }
 
   Future<TimeOfDay?> _getTime(BuildContext context) async {
 
-    final TimeOfDay? selectedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
+    final currentTime = TimeOfDay.now();
+    final currentDate = DateTime.now();
+    final initialDateTime = DateTime(
+        currentDate.year,
+        currentDate.month,
+        currentDate.day,
+        currentTime.hour,
+        currentTime.minute + 1);
+
+    final maximumDateTime = DateTime(
+        currentDate.year + 1,
+        currentDate.month,
+        currentDate.day,
+        currentTime.hour,
+        currentTime.minute);
+
+    final DateTime? selectedDateTime = await showModalBottomSheet<DateTime>(
+        context: context,
+        builder: (context) {
+          DateTime _tempPickedDate = initialDateTime;
+          return Container(
+            height: 250,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      CupertinoButton(
+                        child: Text('Cancel'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      CupertinoButton(
+                        child: Text('Done'),
+                        onPressed: () {
+                          Navigator.of(context).pop(_tempPickedDate);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(
+                  height: 0,
+                  thickness: 1,
+                ),
+                Expanded(
+                  child: Container(
+                    child: CupertinoDatePicker(
+                      mode: CupertinoDatePickerMode.time,
+                      use24hFormat: true,
+                      minuteInterval: 1,
+                      initialDateTime: initialDateTime,
+                      minimumDate: initialDateTime,
+                      maximumDate: maximumDateTime,
+                      onDateTimeChanged: (DateTime dateTime) {
+                        _tempPickedDate = dateTime;
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
     );
+
+    final selectedTime = selectedDateTime != null
+        ?  TimeOfDay.fromDateTime(selectedDateTime)
+        : null;
 
     return selectedTime;
   }

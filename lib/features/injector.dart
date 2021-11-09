@@ -14,7 +14,7 @@ final getIt = GetIt.instance;
 )
 Future<void> configureDependencies() async {
 
-  getIt.registerFactory<AuthPreferences>(() => AuthPreferences(getIt.get()));
+  getIt.registerFactory<AuthStorageImpl>(() => AuthStorageImpl(getIt.get()));
   getIt.registerFactory<FiltersPreferences>(() => FiltersPreferences(getIt.get()));
 
   await $initGetIt(getIt, environment: Environment.prod);

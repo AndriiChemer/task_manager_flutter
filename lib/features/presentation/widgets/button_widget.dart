@@ -7,23 +7,27 @@ class ButtonWidget extends StatelessWidget {
   final bool? isLoading;
   final Color? textColor;
   final Color? buttonColor;
+  final EdgeInsetsGeometry? margin;
 
-  const ButtonWidget({Key? key, this.onPressed, required this.title, this.isLoading, this.textColor, this.buttonColor}) : super(key: key);
+  const ButtonWidget({Key? key, this.onPressed, required this.title, this.isLoading, this.textColor, this.buttonColor, this.margin}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var buttonStyle = _getButtonStyle(context);
 
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        style: buttonStyle,
-        onPressed: onPressed,
-        child: isLoading ?? false ? CircularProgressIndicator(color: Colors.white,) : Text(
-          title,
-          style: TextStyle(fontSize: 20),
-        )
+    return Container(
+      margin: margin,
+      child: SizedBox(
+        width: double.infinity,
+        height: 50,
+        child: ElevatedButton(
+          style: buttonStyle,
+          onPressed: onPressed,
+          child: isLoading ?? false ? CircularProgressIndicator(color: Colors.white,) : Text(
+            title,
+            style: TextStyle(fontSize: 20),
+          )
+        ),
       ),
     );
   }

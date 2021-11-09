@@ -1,5 +1,5 @@
 class Validator {
-  static String? emailValidator(String? value) {
+  static bool emailValidator(String? value) {
     String pattern =
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
         r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
@@ -8,24 +8,25 @@ class Validator {
     RegExp regex = new RegExp(pattern);
 
     if (value == null || value.isEmpty) {
-      return 'Field should not be empty';
+      return false;
     } else if(!regex.hasMatch(value)) {
-      return 'Enter a valid email address';
+      return false;
     }
 
-    return null;
+    return true;
   }
 
 
-  static String? passwordValidator(String? value) {
+  static bool passwordValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Field should not be empty';
+      return false;
     }
 
     if(value.length < 6) {
-      return 'Password must be more then 6 chars';
+      return false;
     }
-    return null;
+
+    return true;
   }
 
 }
