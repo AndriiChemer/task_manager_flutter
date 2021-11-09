@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -95,24 +96,133 @@ class SelectDateTimeWidget extends HookWidget {
   }
 
   Future<DateTime?> _getDate(BuildContext context) async {
-    var nowDateTime = DateTime.now();
+    final nowDateTime = DateTime.now();
 
-    final DateTime? selectedDate = await showDatePicker(
-        context: context,
-        initialDate: nowDateTime,
-        initialDatePickerMode: DatePickerMode.day,
-        firstDate: nowDateTime,
-        lastDate: DateTime(nowDateTime.year + 1, nowDateTime.month));
-
+    final DateTime? selectedDate = await showModalBottomSheet<DateTime>(
+      context: context,
+      builder: (context) {
+        DateTime _tempPickedDate = nowDateTime;
+        return Container(
+          height: 250,
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    CupertinoButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    CupertinoButton(
+                      child: Text('Done'),
+                      onPressed: () {
+                        Navigator.of(context).pop(_tempPickedDate);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                height: 0,
+                thickness: 1,
+              ),
+              Expanded(
+                child: Container(
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.date,
+                    initialDateTime: nowDateTime,
+                    minimumDate: nowDateTime,
+                    maximumDate: DateTime(nowDateTime.year + 1, nowDateTime.month),
+                    onDateTimeChanged: (DateTime dateTime) {
+                      _tempPickedDate = dateTime;
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    );
     return selectedDate;
   }
 
   Future<TimeOfDay?> _getTime(BuildContext context) async {
 
-    final TimeOfDay? selectedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
+    final currentTime = TimeOfDay.now();
+    final currentDate = DateTime.now();
+    final initialDateTime = DateTime(
+        currentDate.year,
+        currentDate.month,
+        currentDate.day,
+        currentTime.hour,
+        currentTime.minute + 1);
+
+    final maximumDateTime = DateTime(
+        currentDate.year + 1,
+        currentDate.month,
+        currentDate.day,
+        currentTime.hour,
+        currentTime.minute);
+
+    final DateTime? selectedDateTime = await showModalBottomSheet<DateTime>(
+        context: context,
+        builder: (context) {
+          DateTime _tempPickedDate = initialDateTime;
+          return Container(
+            height: 250,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      CupertinoButton(
+                        child: Text('Cancel'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      CupertinoButton(
+                        child: Text('Done'),
+                        onPressed: () {
+                          Navigator.of(context).pop(_tempPickedDate);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(
+                  height: 0,
+                  thickness: 1,
+                ),
+                Expanded(
+                  child: Container(
+                    child: CupertinoDatePicker(
+                      mode: CupertinoDatePickerMode.time,
+                      use24hFormat: true,
+                      minuteInterval: 1,
+                      initialDateTime: initialDateTime,
+                      minimumDate: initialDateTime,
+                      maximumDate: maximumDateTime,
+                      onDateTimeChanged: (DateTime dateTime) {
+                        _tempPickedDate = dateTime;
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
     );
+
+    final selectedTime = selectedDateTime != null
+        ?  TimeOfDay.fromDateTime(selectedDateTime)
+        : null;
 
     return selectedTime;
   }
