@@ -20,7 +20,6 @@ class TaskManager extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    print("ANDRII conflict 2");
     final navigationService = GetIt.instance.get<NavigationService>();
     final appRouter = GetIt.instance.get<AppRouter>();
 
