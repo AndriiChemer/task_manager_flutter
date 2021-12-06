@@ -16,6 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
 
+
   runApp(TaskManager());
 }
 
@@ -30,6 +31,9 @@ class TaskManager extends HookWidget {
     useChangeNotifierListener<AuthNotifier>((changeNotifier) => _listener(changeNotifier));
 
     return MaterialApp(
+
+
+
       title: 'Task manager',
       debugShowCheckedModeBanner: false,
       navigatorKey: navigationService.navigatorKey,
@@ -42,9 +46,15 @@ class TaskManager extends HookWidget {
   }
 
   void _listener(AuthNotifier changeNotifier) {
+
+
+
     if(!changeNotifier.isUserAuthorized) {
       GetIt.instance.get<NavigationService>()
           .pushReplacement(AuthPage.id);
     }
   }
+
+
+
 }
