@@ -5,6 +5,7 @@ import 'package:flutter_task_manager/core/utils/utils.dart';
 import 'package:flutter_task_manager/features/domain/task/model/task.dart';
 import 'package:flutter_task_manager/features/presentation/screens/addedittask/add_edit_task_page.dart';
 import 'package:flutter_task_manager/features/presentation/screens/taskdetails/task_details_page_cubit.dart';
+import 'package:flutter_task_manager/features/presentation/widgets/app_bar/navigation_button.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/hooks/hooks.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/hooks/use_navigation_hook.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/widgets.dart';
@@ -28,16 +29,19 @@ class TaskDetailsPage extends HookWidget {
 
     final openEditScreenCallback = useCallback(() async {
       final updatedTaskModel = await navigator.navigateTo(AddEditTaskPage.id, task.value);
-      task.value = updatedTaskModel;
+
+      if(updatedTaskModel != null) {
+        task.value = updatedTaskModel;
+      }
     }, []);
 
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(double.infinity, 57),
-          child: AppBarDetails(
-            taskModel: task.value,
-            onEditClick: openEditScreenCallback,
-          ),
+        appBar: CustomAppBar.create(
+            title: context.getString("task_details",),
+            rightElements: [
+              IconButton(icon: Icon(Icons.edit, size: 26,), onPressed: openEditScreenCallback,)
+            ],
+            leading: NavigationButton.backWithTitle(title: context.getString("back"),)
         ),
         body: SafeArea(
           child: Container(
@@ -84,45 +88,6 @@ class TaskDetailsPage extends HookWidget {
 }
 
 /// ================ ELEMENTS ===================
-
-class AppBarDetails extends StatelessWidget {
-  final Task taskModel;
-  final Function() onEditClick;
-
-  const AppBarDetails({
-    Key? key,
-    required this.taskModel,
-    required this.onEditClick}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomAppBar(
-      title: context.getString("task_details",),
-      action: IconButton(
-        icon: Icon(Icons.edit, size: 26,),
-        onPressed: onEditClick,
-      ),
-      leading: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Container(
-          margin: EdgeInsets.only(left: 10),
-          child: Row(
-            children: [
-              Icon(Icons.arrow_back_ios_rounded, size: 26,),
-              Text(
-                context.getString("back"),
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: Theme.of(context).iconTheme.color),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class Title extends StatelessWidget {
   final String title;
   final int dueBy;

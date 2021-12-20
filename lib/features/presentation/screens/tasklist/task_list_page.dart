@@ -7,6 +7,7 @@ import 'package:flutter_task_manager/features/presentation/screens/addedittask/a
 import 'package:flutter_task_manager/features/presentation/screens/auth/auth_page.dart';
 import 'package:flutter_task_manager/features/presentation/screens/filters/filters_screen.dart';
 import 'package:flutter_task_manager/features/presentation/screens/tasklist/task_list_page_cubit.dart';
+import 'package:flutter_task_manager/features/presentation/widgets/app_bar/navigation_button.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/hooks/cubit_hooks.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/hooks/use_navigation_hook.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/widgets.dart';
@@ -88,30 +89,23 @@ class AppBarTaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomAppBar(
+    return CustomAppBar.create(
       title: context.getString("my_tasks"),
-      action: Row(
-        children: [
-          IconButton(
-            icon: Icon(Icons.sort, size: 26,),
-            onPressed: () {
-              Navigator.pushNamed(context, FilterScreen.id);
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.logout, size: 26,),
-            onPressed: () {
-              cubit.logout();
-            },
-          ),
-        ],
-      ),
-      leading: IconButton(
-        icon: Icon(Icons.add_alert, size: 26,),
-        onPressed: () {
-          context.showFeatureNotImplemented();
-        },
-      ),
+      rightElements: [
+        IconButton(
+          icon: Icon(Icons.sort, size: 26,),
+          onPressed: () {
+            Navigator.pushNamed(context, FilterScreen.id);
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.logout, size: 26,),
+          onPressed: () {
+            cubit.logout();
+          },
+        ),
+      ],
+      leading: NavigationButton.backWithTitle(title: context.getString("back"),),
     );
   }
 }

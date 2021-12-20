@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
 import 'package:flutter_task_manager/features/domain/task/model/task.dart';
+import 'package:flutter_task_manager/features/presentation/widgets/app_bar/navigation_button.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/hooks/hooks.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/widgets.dart';
 import 'package:flutter_task_manager/features/presentation/screens/addedittask/add_edit_task_page_cubit.dart';
@@ -62,9 +63,9 @@ class AddEditTaskPage extends HookWidget {
             () => context.getString('invalid_field'));
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(double.infinity, 57),
-        child: AddEditAppBar(isAddTaskScreen: isAddTaskScreen),
+      appBar: CustomAppBar.create(
+        title: isAddTaskScreen ? context.getString("add_task") : context.getString("edit_task"),
+        leading: NavigationButton.backWithTitle(title: context.getString("back"),),
       ),
       body: SafeArea(
         child: Column(
@@ -146,38 +147,6 @@ class AddEditTaskPage extends HookWidget {
 }
 
 ///=================== ELEMENTS ===================
-class AddEditAppBar extends StatelessWidget {
-  final bool isAddTaskScreen;
-
-  const AddEditAppBar({Key? key, required this.isAddTaskScreen}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var appBarTitle = isAddTaskScreen ? context.getString("add_task") : context.getString("edit_task");
-
-    return CustomAppBar(
-      title: appBarTitle,
-      leading: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Container(
-          margin: EdgeInsets.only(left: 10),
-          child: Row(
-            children: [
-              Icon(Icons.arrow_back_ios_rounded, size: 26,),
-              Text(
-                context.getString("back"),
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: Theme.of(context).iconTheme.color),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class PriorityContainer extends StatelessWidget {
   final ValueNotifier<String?> priorityController;
   final String? error;

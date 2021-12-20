@@ -58,7 +58,7 @@ class SettingsAppBar extends StatelessWidget {
 
     return CustomAppBar(
       title: context.getString("settings"),
-      leading: GestureDetector(
+      leadingElement: GestureDetector(
         onTap: () {
           Navigator.pop(context);
         },
