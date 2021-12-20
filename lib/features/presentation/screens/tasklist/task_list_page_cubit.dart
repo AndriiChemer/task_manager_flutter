@@ -3,7 +3,6 @@ import 'package:flutter_task_manager/features/data/task/api/models/pagination/pa
 import 'package:flutter_task_manager/features/domain/auth/use_case/logout_use_case.dart';
 import 'package:flutter_task_manager/features/domain/network/general_connection_error.dart';
 import 'package:flutter_task_manager/features/domain/task/model/task.dart';
-import 'package:flutter_task_manager/features/domain/task/use_case/delete_task_usecase.dart';
 import 'package:flutter_task_manager/features/domain/task/use_case/get_task_list_use_case.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/hooks/cubit_hooks.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -110,6 +109,7 @@ class TaskListPageCubit extends Cubit<TaskListPageState> {
 
     _taskList = List.from(updatedTaskList);
 
+    emit(TaskListPageState.loading());
     emit(TaskListPageState.idle(_taskList, false));
   }
 

@@ -120,7 +120,7 @@ class AddEditTaskPage extends HookWidget {
         Navigator.pop(context, state.task);
       },
       addingSuccess: (state) {
-        Navigator.pop(context);
+        Navigator.pop(context, true);
       },
       connectionError: (state) {
         context.showNegativeMessage(state.toString());

@@ -8,8 +8,8 @@ import 'package:flutter_task_manager/features/presentation/screens/auth/auth_pag
 import 'package:flutter_task_manager/features/presentation/screens/filters/filters_screen.dart';
 import 'package:flutter_task_manager/features/presentation/screens/tasklist/task_list_page_cubit.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/hooks/cubit_hooks.dart';
+import 'package:flutter_task_manager/features/presentation/widgets/hooks/use_navigation_hook.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/widgets.dart';
-import 'package:get_it/get_it.dart';
 
 class TaskListScreen extends HookWidget {
   static const String id = "/";
@@ -40,7 +40,7 @@ class TaskListScreen extends HookWidget {
         preferredSize: Size(double.infinity, 57),
         child: AppBarTaskList(cubit: cubit,),
       ),
-      floatingActionButton: AddTaskButton(),
+      floatingActionButton: AddTaskButton(cubit: cubit),
       body: SafeArea(
         child: state.maybeMap(
           idle: (state) => Content(state.taskList, cubit, scrollController),
@@ -116,20 +116,29 @@ class AppBarTaskList extends StatelessWidget {
   }
 }
 
-class AddTaskButton extends StatelessWidget {
+class AddTaskButton extends HookWidget {
+  final TaskListPageCubit cubit;
+
+  const AddTaskButton({Key? key, required this.cubit}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    final navigator = useNavigator();
+
     return FloatingActionButton(
       child: Icon(Icons.add, size: 42,),
-      onPressed: () {
-        _openAddTaskScreen(context);
+      onPressed: () async {
+        await _openAddTaskScreen(context, navigator);
       },
     );
   }
 
-  _openAddTaskScreen(BuildContext context) {
-    GetIt.instance.get<NavigationService>()
-        .navigateTo(AddEditTaskPage.id);
+  Future<void>_openAddTaskScreen(BuildContext context, NavigationService navigator) async {
+    final shouldRefreshTaskList = await navigator.navigateTo(AddEditTaskPage.id);
+
+    if(shouldRefreshTaskList is bool && shouldRefreshTaskList) {
+      cubit.loadFirstPage();
+    }
   }
 }
 
