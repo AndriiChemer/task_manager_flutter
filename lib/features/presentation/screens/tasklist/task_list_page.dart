@@ -4,6 +4,7 @@ import 'package:flutter_task_manager/core/routes/navigation.dart';
 import 'package:flutter_task_manager/core/utils/extension.dart';
 import 'package:flutter_task_manager/features/domain/task/model/task.dart';
 import 'package:flutter_task_manager/features/presentation/screens/addedittask/add_edit_task_page.dart';
+import 'package:flutter_task_manager/features/presentation/screens/auth/auth_page.dart';
 import 'package:flutter_task_manager/features/presentation/screens/filters/filters_screen.dart';
 import 'package:flutter_task_manager/features/presentation/screens/tasklist/task_list_page_cubit.dart';
 import 'package:flutter_task_manager/features/presentation/widgets/hooks/cubit_hooks.dart';
@@ -37,18 +38,16 @@ class TaskListScreen extends HookWidget {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(double.infinity, 57),
-        child: AppBarTaskList(),
+        child: AppBarTaskList(cubit: cubit,),
       ),
       floatingActionButton: AddTaskButton(),
       body: SafeArea(
         child: state.maybeMap(
-          idle: (state) {
-            print("ANDRII size: ${state.taskList.length}");
-            return Content(state.taskList, cubit, scrollController);
-          },
+          idle: (state) => Content(state.taskList, cubit, scrollController),
           empty: (state) => Content([], cubit, scrollController),
           loading: (state) => LoadingProgress(),
-          orElse: () => LoadingProgress(),
+          initial: (state) => const SizedBox(),
+          orElse: () => const SizedBox(),
         ),
       ),
     );
@@ -70,6 +69,9 @@ class TaskListScreen extends HookWidget {
     BuildContext context
   ) {
     state.maybeMap(
+      signOut: (state) {
+        Navigator.pushNamed(context, AuthPage.id);
+      },
       connectionError: (state) {
         context.showNegativeMessage(state.toString());
       },
@@ -80,15 +82,29 @@ class TaskListScreen extends HookWidget {
 
 ///=================== ELEMENTS =====================
 class AppBarTaskList extends StatelessWidget {
+  final TaskListPageCubit cubit;
+
+  const AppBarTaskList({Key? key, required this.cubit}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return CustomAppBar(
       title: context.getString("my_tasks"),
-      action: IconButton(
-        icon: Icon(Icons.sort, size: 26,),
-        onPressed: () {
-          _onOpenFilterScreenClick(context);
-        },
+      action: Row(
+        children: [
+          IconButton(
+            icon: Icon(Icons.sort, size: 26,),
+            onPressed: () {
+              Navigator.pushNamed(context, FilterScreen.id);
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.logout, size: 26,),
+            onPressed: () {
+              cubit.logout();
+            },
+          ),
+        ],
       ),
       leading: IconButton(
         icon: Icon(Icons.add_alert, size: 26,),
@@ -97,10 +113,6 @@ class AppBarTaskList extends StatelessWidget {
         },
       ),
     );
-  }
-  
-  _onOpenFilterScreenClick(BuildContext context) {
-    Navigator.pushNamed(context, FilterScreen.id);
   }
 }
 

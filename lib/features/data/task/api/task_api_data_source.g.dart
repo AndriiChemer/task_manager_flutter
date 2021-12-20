@@ -14,19 +14,19 @@ class _TaskApiDataSource implements TaskApiDataSource {
   String? baseUrl;
 
   @override
-  Future<TaskResponse> createTask(taskRequest) async {
+  Future<TaskResponseDTO> createTask(taskRequest) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(taskRequest.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<TaskResponse>(
+        _setStreamType<TaskResponseDTO>(
             Options(method: 'POST', headers: _headers, extra: _extra)
                 .compose(_dio.options, '/api/tasks',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = TaskResponse.fromJson(_result.data!);
+    final value = TaskResponseDTO.fromJson(_result.data!);
     return value;
   }
 
@@ -45,18 +45,18 @@ class _TaskApiDataSource implements TaskApiDataSource {
   }
 
   @override
-  Future<TaskResponse> getTaskById(id) async {
+  Future<TaskDTO> getTaskById(id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<TaskResponse>(
+        _setStreamType<TaskDTO>(
             Options(method: 'GET', headers: _headers, extra: _extra)
                 .compose(_dio.options, '/api/tasks/${id}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = TaskResponse.fromJson(_result.data!);
+    final value = TaskDTO.fromJson(_result.data!);
     return value;
   }
 

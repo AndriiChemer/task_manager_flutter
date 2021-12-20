@@ -9,7 +9,7 @@ part of 'task_list_response.dart';
 TaskListResponse _$TaskListResponseFromJson(Map<String, dynamic> json) =>
     TaskListResponse(
       tasks: (json['tasks'] as List<dynamic>)
-          .map((e) => TaskResponse.fromJson(e as Map<String, dynamic>))
+          .map((e) => TaskDTO.fromJson(e as Map<String, dynamic>))
           .toList(),
       pagination:
           PaginationResponse.fromJson(json['meta'] as Map<String, dynamic>),

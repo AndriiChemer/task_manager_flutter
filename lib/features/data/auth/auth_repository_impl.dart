@@ -20,7 +20,7 @@ class UserRepositoryImpl implements AuthRepository {
       () => _authApiDataSource.authUser(userRequest)
     );
 
-    _authStorage.saveToken(response.token);
+    await _authStorage.saveToken(response.token);
 
     return response.token;
   }
@@ -31,7 +31,7 @@ class UserRepositoryImpl implements AuthRepository {
       () => _authApiDataSource.createUser(userRequest)
     );
 
-    _authStorage.saveToken(response.token);
+    await _authStorage.saveToken(response.token);
 
     return response.token;
   }

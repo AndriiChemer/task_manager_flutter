@@ -15,10 +15,15 @@ class AuthStorageImpl implements AuthStore {
 
   @override
   Future<String> getToken() async {
-    var token = _prefs.getString(_TOKEN_KEY);
+    final token = _prefs.getString(_TOKEN_KEY);
 
     if(token == null) return "";
 
     return token;
+  }
+
+  @override
+  Future<void> clear() async {
+    await _prefs.remove(_TOKEN_KEY);
   }
 }

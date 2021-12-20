@@ -6,41 +6,42 @@ import 'package:injectable/injectable.dart';
 part 'task_response.g.dart';
 
 @JsonSerializable(createToJson: true)
-class TaskResponse  {
+class TaskResponseDTO  {
+  final TaskDTO task;
+
+  TaskResponseDTO(this.task);
+
+  factory TaskResponseDTO.fromJson(Map<String, dynamic> map)
+  => _$TaskResponseDTOFromJson(map);
+
+  Map<String, dynamic> toJson() => _$TaskResponseDTOToJson(this);
+}
+
+@JsonSerializable(createToJson: true)
+class TaskDTO  {
   final int? id;
   final String title;
   final int dueBy;
   final String priority;
 
-
-
-
-  TaskResponse({
-
+  TaskDTO({
     this.id,
     required this.title,
     required this.dueBy,
     required this.priority,
-
   });
 
+  factory TaskDTO.fromJson(Map<String, dynamic> map) => _$TaskDTOFromJson(map);
 
-
-  factory TaskResponse.fromJson(Map<String, dynamic> map)
-      => _$TaskResponseFromJson(map);
-
-
-
-
-  Map<String, dynamic> toJson() => _$TaskResponseToJson(this);
+  Map<String, dynamic> toJson() => _$TaskDTOToJson(this);
 }
 
 @Injectable()
-class TaskMapper implements DataMapper<TaskResponse, Task> {
+class TaskMapper implements DataMapper<TaskDTO, Task> {
   @override
-  Task call(TaskResponse data) =>
+  Task call(TaskDTO data) =>
       Task(
-        id: data.id != null ? int.tryParse(data.id!) : null,
+        id: data.id ?? null,
         title: data.title,
         dueBy: data.dueBy,
         priority: data.priority

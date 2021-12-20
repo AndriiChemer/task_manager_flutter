@@ -19,7 +19,7 @@ extension ProviderExtensions on BuildContext {
   }
 
   _showMessage(String message, Color? textColor) {
-    Scaffold.of(this).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(this).showSnackBar(SnackBar(
       content: Text(message, style: TextStyle(color: textColor, fontSize: 16, fontWeight: FontWeight.w600),),
       duration: Duration(seconds: 3),
     ));

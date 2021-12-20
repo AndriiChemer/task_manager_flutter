@@ -6,7 +6,7 @@ part 'task_list_response.g.dart';
 
 @JsonSerializable(createToJson: true)
 class TaskListResponse {
-  final List<TaskResponse> tasks;
+  final List<TaskDTO> tasks;
   @JsonKey(name: 'meta')
   final PaginationResponse pagination;
 

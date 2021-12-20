@@ -7,9 +7,14 @@ class TaskListPageState with _$TaskListPageState {
   const factory TaskListPageState.loading() = _TaskListPageStateLoading;
 
   @Implements(BuildState)
+  const factory TaskListPageState.initial() = _TaskListPageStateInitial;
+
+  @Implements(BuildState)
   const factory TaskListPageState.empty() = _TaskListPageStateEmpty;
 
   const factory TaskListPageState.connectionError(GeneralConnectionError error) = _TaskListPageStateConnectionError;
+
+  const factory TaskListPageState.signOut() = _TaskListPageStateSignOut;
 
   @Implements(BuildState)
   const factory TaskListPageState.idle(

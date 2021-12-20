@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_task_manager/features/data/task/api/models/pagination/pagination_response.dart';
+import 'package:flutter_task_manager/features/domain/auth/use_case/logout_use_case.dart';
 import 'package:flutter_task_manager/features/domain/network/general_connection_error.dart';
 import 'package:flutter_task_manager/features/domain/task/model/task.dart';
 import 'package:flutter_task_manager/features/domain/task/use_case/delete_task_usecase.dart';
@@ -14,6 +15,7 @@ part 'task_list_page_state.dart';
 @Singleton()
 class TaskListPageCubit extends Cubit<TaskListPageState> {
   final GetTaskListUseCase _getTaskListUseCase;
+  final LogoutUseCase _logoutUseCase;
 
   int _currentPage = -1;
   int _limit = 0;
@@ -22,7 +24,8 @@ class TaskListPageCubit extends Cubit<TaskListPageState> {
 
   TaskListPageCubit(
     this._getTaskListUseCase,
-  ) : super(TaskListPageState.loading());
+    this._logoutUseCase,
+  ) : super(TaskListPageState.initial());
 
   Future<void> loadFirstPage() async {
     emit(TaskListPageState.loading());
@@ -33,9 +36,8 @@ class TaskListPageCubit extends Cubit<TaskListPageState> {
     _taskList = [];
 
     try {
-
       final pair = await _getTaskListUseCase(
-          params: PaginationResponse(count: _count, limit: _limit, current: _currentPage)
+        params: PaginationResponse(count: _count, limit: _limit, current: _currentPage)
       );
       final taskList = pair.first;
       final pagination = pair.second;
@@ -122,5 +124,10 @@ class TaskListPageCubit extends Cubit<TaskListPageState> {
     _taskList = List.from(updatedTaskList);
 
     emit(TaskListPageState.idle(_taskList, false));
+  }
+
+  Future<void> logout() async {
+    await _logoutUseCase();
+    emit(TaskListPageState.signOut());
   }
 }

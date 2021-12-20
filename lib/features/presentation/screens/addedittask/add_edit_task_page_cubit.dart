@@ -64,7 +64,6 @@ class AddEditTaskPageCubit extends Cubit<AddEditTaskPageState> {
     try {
       emit(AddEditTaskPageState.loading());
 
-      print('ANDRII: _task: ${_task.toString()}');
       final id = await createTaskUseCase(params: _task);
       _task = _task.copyWith(id: id);
       _taskListPageCubit.add(_task);

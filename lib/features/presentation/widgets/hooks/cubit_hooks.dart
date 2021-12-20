@@ -32,15 +32,7 @@ S useCubitBuilder<T extends Cubit, S>(
   final buildWhenConditioner = buildWhen;
   final state = useMemoized(
     () => cubit.stream
-    .map((event) {
-      print("ANDRII event: $event");
-      return event;
-    })
-        .where(buildWhenConditioner ?? _CubitDefaults.defaultBlocBuilderCondition)
-        .map((event) {
-      print("CHEMER event: $event");
-      return event;
-    }),
+      .where(buildWhenConditioner ?? _CubitDefaults.defaultBlocBuilderCondition),
     [cubit.state]
   );
 

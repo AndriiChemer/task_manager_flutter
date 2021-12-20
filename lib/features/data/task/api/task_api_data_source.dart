@@ -16,13 +16,13 @@ abstract class TaskApiDataSource {
   factory TaskApiDataSource(TaskManagerDio dio) = _TaskApiDataSource;
 
   @POST('/api/tasks')
-  Future<TaskResponse> createTask(@Body() TaskRequest taskRequest);
+  Future<TaskResponseDTO> createTask(@Body() TaskRequest taskRequest);
 
   @DELETE('/api/tasks/{id}')
   Future<void> deleteTask(@Path() int id);
 
   @GET('/api/tasks/{id}')
-  Future<TaskResponse> getTaskById(@Path() int id);
+  Future<TaskDTO> getTaskById(@Path() int id);
 
   /// "/tasks?sort=${sortType.toLowerCase()}%20${orderBy.toLowerCase()}"
   @GET('/api/tasks')

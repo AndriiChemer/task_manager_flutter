@@ -21,6 +21,10 @@ class _$TaskListPageStateTearOff {
     return const _TaskListPageStateLoading();
   }
 
+  _TaskListPageStateInitial initial() {
+    return const _TaskListPageStateInitial();
+  }
+
   _TaskListPageStateEmpty empty() {
     return const _TaskListPageStateEmpty();
   }
@@ -30,6 +34,10 @@ class _$TaskListPageStateTearOff {
     return _TaskListPageStateConnectionError(
       error,
     );
+  }
+
+  _TaskListPageStateSignOut signOut() {
+    return const _TaskListPageStateSignOut();
   }
 
   _TaskListPageStateIdle idle(List<Task> taskList, bool loadingMore) {
@@ -48,24 +56,30 @@ mixin _$TaskListPageState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
+    required TResult Function() initial,
     required TResult Function() empty,
     required TResult Function(GeneralConnectionError error) connectionError,
+    required TResult Function() signOut,
     required TResult Function(List<Task> taskList, bool loadingMore) idle,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function()? initial,
     TResult Function()? empty,
     TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
     TResult Function(List<Task> taskList, bool loadingMore)? idle,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function()? initial,
     TResult Function()? empty,
     TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
     TResult Function(List<Task> taskList, bool loadingMore)? idle,
     required TResult orElse(),
   }) =>
@@ -73,25 +87,31 @@ mixin _$TaskListPageState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_TaskListPageStateLoading value) loading,
+    required TResult Function(_TaskListPageStateInitial value) initial,
     required TResult Function(_TaskListPageStateEmpty value) empty,
     required TResult Function(_TaskListPageStateConnectionError value)
         connectionError,
+    required TResult Function(_TaskListPageStateSignOut value) signOut,
     required TResult Function(_TaskListPageStateIdle value) idle,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
     TResult Function(_TaskListPageStateEmpty value)? empty,
     TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
     TResult Function(_TaskListPageStateIdle value)? idle,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
     TResult Function(_TaskListPageStateEmpty value)? empty,
     TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
     TResult Function(_TaskListPageStateIdle value)? idle,
     required TResult orElse(),
   }) =>
@@ -158,8 +178,10 @@ class _$_TaskListPageStateLoading implements _TaskListPageStateLoading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
+    required TResult Function() initial,
     required TResult Function() empty,
     required TResult Function(GeneralConnectionError error) connectionError,
+    required TResult Function() signOut,
     required TResult Function(List<Task> taskList, bool loadingMore) idle,
   }) {
     return loading();
@@ -169,8 +191,10 @@ class _$_TaskListPageStateLoading implements _TaskListPageStateLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function()? initial,
     TResult Function()? empty,
     TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
     TResult Function(List<Task> taskList, bool loadingMore)? idle,
   }) {
     return loading?.call();
@@ -180,8 +204,10 @@ class _$_TaskListPageStateLoading implements _TaskListPageStateLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function()? initial,
     TResult Function()? empty,
     TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
     TResult Function(List<Task> taskList, bool loadingMore)? idle,
     required TResult orElse(),
   }) {
@@ -195,9 +221,11 @@ class _$_TaskListPageStateLoading implements _TaskListPageStateLoading {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_TaskListPageStateLoading value) loading,
+    required TResult Function(_TaskListPageStateInitial value) initial,
     required TResult Function(_TaskListPageStateEmpty value) empty,
     required TResult Function(_TaskListPageStateConnectionError value)
         connectionError,
+    required TResult Function(_TaskListPageStateSignOut value) signOut,
     required TResult Function(_TaskListPageStateIdle value) idle,
   }) {
     return loading(this);
@@ -207,8 +235,10 @@ class _$_TaskListPageStateLoading implements _TaskListPageStateLoading {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
     TResult Function(_TaskListPageStateEmpty value)? empty,
     TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
     TResult Function(_TaskListPageStateIdle value)? idle,
   }) {
     return loading?.call(this);
@@ -218,8 +248,10 @@ class _$_TaskListPageStateLoading implements _TaskListPageStateLoading {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
     TResult Function(_TaskListPageStateEmpty value)? empty,
     TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
     TResult Function(_TaskListPageStateIdle value)? idle,
     required TResult orElse(),
   }) {
@@ -233,6 +265,138 @@ class _$_TaskListPageStateLoading implements _TaskListPageStateLoading {
 abstract class _TaskListPageStateLoading
     implements TaskListPageState, BuildState {
   const factory _TaskListPageStateLoading() = _$_TaskListPageStateLoading;
+}
+
+/// @nodoc
+abstract class _$TaskListPageStateInitialCopyWith<$Res> {
+  factory _$TaskListPageStateInitialCopyWith(_TaskListPageStateInitial value,
+          $Res Function(_TaskListPageStateInitial) then) =
+      __$TaskListPageStateInitialCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$TaskListPageStateInitialCopyWithImpl<$Res>
+    extends _$TaskListPageStateCopyWithImpl<$Res>
+    implements _$TaskListPageStateInitialCopyWith<$Res> {
+  __$TaskListPageStateInitialCopyWithImpl(_TaskListPageStateInitial _value,
+      $Res Function(_TaskListPageStateInitial) _then)
+      : super(_value, (v) => _then(v as _TaskListPageStateInitial));
+
+  @override
+  _TaskListPageStateInitial get _value =>
+      super._value as _TaskListPageStateInitial;
+}
+
+/// @nodoc
+
+@Implements(BuildState)
+class _$_TaskListPageStateInitial implements _TaskListPageStateInitial {
+  const _$_TaskListPageStateInitial();
+
+  @override
+  String toString() {
+    return 'TaskListPageState.initial()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) || (other is _TaskListPageStateInitial);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function() initial,
+    required TResult Function() empty,
+    required TResult Function(GeneralConnectionError error) connectionError,
+    required TResult Function() signOut,
+    required TResult Function(List<Task> taskList, bool loadingMore) idle,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function()? initial,
+    TResult Function()? empty,
+    TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
+    TResult Function(List<Task> taskList, bool loadingMore)? idle,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function()? initial,
+    TResult Function()? empty,
+    TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
+    TResult Function(List<Task> taskList, bool loadingMore)? idle,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_TaskListPageStateLoading value) loading,
+    required TResult Function(_TaskListPageStateInitial value) initial,
+    required TResult Function(_TaskListPageStateEmpty value) empty,
+    required TResult Function(_TaskListPageStateConnectionError value)
+        connectionError,
+    required TResult Function(_TaskListPageStateSignOut value) signOut,
+    required TResult Function(_TaskListPageStateIdle value) idle,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
+    TResult Function(_TaskListPageStateEmpty value)? empty,
+    TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
+    TResult Function(_TaskListPageStateIdle value)? idle,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
+    TResult Function(_TaskListPageStateEmpty value)? empty,
+    TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
+    TResult Function(_TaskListPageStateIdle value)? idle,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _TaskListPageStateInitial
+    implements TaskListPageState, BuildState {
+  const factory _TaskListPageStateInitial() = _$_TaskListPageStateInitial;
 }
 
 /// @nodoc
@@ -277,8 +441,10 @@ class _$_TaskListPageStateEmpty implements _TaskListPageStateEmpty {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
+    required TResult Function() initial,
     required TResult Function() empty,
     required TResult Function(GeneralConnectionError error) connectionError,
+    required TResult Function() signOut,
     required TResult Function(List<Task> taskList, bool loadingMore) idle,
   }) {
     return empty();
@@ -288,8 +454,10 @@ class _$_TaskListPageStateEmpty implements _TaskListPageStateEmpty {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function()? initial,
     TResult Function()? empty,
     TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
     TResult Function(List<Task> taskList, bool loadingMore)? idle,
   }) {
     return empty?.call();
@@ -299,8 +467,10 @@ class _$_TaskListPageStateEmpty implements _TaskListPageStateEmpty {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function()? initial,
     TResult Function()? empty,
     TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
     TResult Function(List<Task> taskList, bool loadingMore)? idle,
     required TResult orElse(),
   }) {
@@ -314,9 +484,11 @@ class _$_TaskListPageStateEmpty implements _TaskListPageStateEmpty {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_TaskListPageStateLoading value) loading,
+    required TResult Function(_TaskListPageStateInitial value) initial,
     required TResult Function(_TaskListPageStateEmpty value) empty,
     required TResult Function(_TaskListPageStateConnectionError value)
         connectionError,
+    required TResult Function(_TaskListPageStateSignOut value) signOut,
     required TResult Function(_TaskListPageStateIdle value) idle,
   }) {
     return empty(this);
@@ -326,8 +498,10 @@ class _$_TaskListPageStateEmpty implements _TaskListPageStateEmpty {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
     TResult Function(_TaskListPageStateEmpty value)? empty,
     TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
     TResult Function(_TaskListPageStateIdle value)? idle,
   }) {
     return empty?.call(this);
@@ -337,8 +511,10 @@ class _$_TaskListPageStateEmpty implements _TaskListPageStateEmpty {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
     TResult Function(_TaskListPageStateEmpty value)? empty,
     TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
     TResult Function(_TaskListPageStateIdle value)? idle,
     required TResult orElse(),
   }) {
@@ -434,8 +610,10 @@ class _$_TaskListPageStateConnectionError
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
+    required TResult Function() initial,
     required TResult Function() empty,
     required TResult Function(GeneralConnectionError error) connectionError,
+    required TResult Function() signOut,
     required TResult Function(List<Task> taskList, bool loadingMore) idle,
   }) {
     return connectionError(error);
@@ -445,8 +623,10 @@ class _$_TaskListPageStateConnectionError
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function()? initial,
     TResult Function()? empty,
     TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
     TResult Function(List<Task> taskList, bool loadingMore)? idle,
   }) {
     return connectionError?.call(error);
@@ -456,8 +636,10 @@ class _$_TaskListPageStateConnectionError
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function()? initial,
     TResult Function()? empty,
     TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
     TResult Function(List<Task> taskList, bool loadingMore)? idle,
     required TResult orElse(),
   }) {
@@ -471,9 +653,11 @@ class _$_TaskListPageStateConnectionError
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_TaskListPageStateLoading value) loading,
+    required TResult Function(_TaskListPageStateInitial value) initial,
     required TResult Function(_TaskListPageStateEmpty value) empty,
     required TResult Function(_TaskListPageStateConnectionError value)
         connectionError,
+    required TResult Function(_TaskListPageStateSignOut value) signOut,
     required TResult Function(_TaskListPageStateIdle value) idle,
   }) {
     return connectionError(this);
@@ -483,8 +667,10 @@ class _$_TaskListPageStateConnectionError
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
     TResult Function(_TaskListPageStateEmpty value)? empty,
     TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
     TResult Function(_TaskListPageStateIdle value)? idle,
   }) {
     return connectionError?.call(this);
@@ -494,8 +680,10 @@ class _$_TaskListPageStateConnectionError
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
     TResult Function(_TaskListPageStateEmpty value)? empty,
     TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
     TResult Function(_TaskListPageStateIdle value)? idle,
     required TResult orElse(),
   }) {
@@ -514,6 +702,136 @@ abstract class _TaskListPageStateConnectionError implements TaskListPageState {
   @JsonKey(ignore: true)
   _$TaskListPageStateConnectionErrorCopyWith<_TaskListPageStateConnectionError>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$TaskListPageStateSignOutCopyWith<$Res> {
+  factory _$TaskListPageStateSignOutCopyWith(_TaskListPageStateSignOut value,
+          $Res Function(_TaskListPageStateSignOut) then) =
+      __$TaskListPageStateSignOutCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$TaskListPageStateSignOutCopyWithImpl<$Res>
+    extends _$TaskListPageStateCopyWithImpl<$Res>
+    implements _$TaskListPageStateSignOutCopyWith<$Res> {
+  __$TaskListPageStateSignOutCopyWithImpl(_TaskListPageStateSignOut _value,
+      $Res Function(_TaskListPageStateSignOut) _then)
+      : super(_value, (v) => _then(v as _TaskListPageStateSignOut));
+
+  @override
+  _TaskListPageStateSignOut get _value =>
+      super._value as _TaskListPageStateSignOut;
+}
+
+/// @nodoc
+
+class _$_TaskListPageStateSignOut implements _TaskListPageStateSignOut {
+  const _$_TaskListPageStateSignOut();
+
+  @override
+  String toString() {
+    return 'TaskListPageState.signOut()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) || (other is _TaskListPageStateSignOut);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function() initial,
+    required TResult Function() empty,
+    required TResult Function(GeneralConnectionError error) connectionError,
+    required TResult Function() signOut,
+    required TResult Function(List<Task> taskList, bool loadingMore) idle,
+  }) {
+    return signOut();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function()? initial,
+    TResult Function()? empty,
+    TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
+    TResult Function(List<Task> taskList, bool loadingMore)? idle,
+  }) {
+    return signOut?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function()? initial,
+    TResult Function()? empty,
+    TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
+    TResult Function(List<Task> taskList, bool loadingMore)? idle,
+    required TResult orElse(),
+  }) {
+    if (signOut != null) {
+      return signOut();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_TaskListPageStateLoading value) loading,
+    required TResult Function(_TaskListPageStateInitial value) initial,
+    required TResult Function(_TaskListPageStateEmpty value) empty,
+    required TResult Function(_TaskListPageStateConnectionError value)
+        connectionError,
+    required TResult Function(_TaskListPageStateSignOut value) signOut,
+    required TResult Function(_TaskListPageStateIdle value) idle,
+  }) {
+    return signOut(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
+    TResult Function(_TaskListPageStateEmpty value)? empty,
+    TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
+    TResult Function(_TaskListPageStateIdle value)? idle,
+  }) {
+    return signOut?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
+    TResult Function(_TaskListPageStateEmpty value)? empty,
+    TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
+    TResult Function(_TaskListPageStateIdle value)? idle,
+    required TResult orElse(),
+  }) {
+    if (signOut != null) {
+      return signOut(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _TaskListPageStateSignOut implements TaskListPageState {
+  const factory _TaskListPageStateSignOut() = _$_TaskListPageStateSignOut;
 }
 
 /// @nodoc
@@ -597,8 +915,10 @@ class _$_TaskListPageStateIdle implements _TaskListPageStateIdle {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
+    required TResult Function() initial,
     required TResult Function() empty,
     required TResult Function(GeneralConnectionError error) connectionError,
+    required TResult Function() signOut,
     required TResult Function(List<Task> taskList, bool loadingMore) idle,
   }) {
     return idle(taskList, loadingMore);
@@ -608,8 +928,10 @@ class _$_TaskListPageStateIdle implements _TaskListPageStateIdle {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function()? initial,
     TResult Function()? empty,
     TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
     TResult Function(List<Task> taskList, bool loadingMore)? idle,
   }) {
     return idle?.call(taskList, loadingMore);
@@ -619,8 +941,10 @@ class _$_TaskListPageStateIdle implements _TaskListPageStateIdle {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
+    TResult Function()? initial,
     TResult Function()? empty,
     TResult Function(GeneralConnectionError error)? connectionError,
+    TResult Function()? signOut,
     TResult Function(List<Task> taskList, bool loadingMore)? idle,
     required TResult orElse(),
   }) {
@@ -634,9 +958,11 @@ class _$_TaskListPageStateIdle implements _TaskListPageStateIdle {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_TaskListPageStateLoading value) loading,
+    required TResult Function(_TaskListPageStateInitial value) initial,
     required TResult Function(_TaskListPageStateEmpty value) empty,
     required TResult Function(_TaskListPageStateConnectionError value)
         connectionError,
+    required TResult Function(_TaskListPageStateSignOut value) signOut,
     required TResult Function(_TaskListPageStateIdle value) idle,
   }) {
     return idle(this);
@@ -646,8 +972,10 @@ class _$_TaskListPageStateIdle implements _TaskListPageStateIdle {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
     TResult Function(_TaskListPageStateEmpty value)? empty,
     TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
     TResult Function(_TaskListPageStateIdle value)? idle,
   }) {
     return idle?.call(this);
@@ -657,8 +985,10 @@ class _$_TaskListPageStateIdle implements _TaskListPageStateIdle {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_TaskListPageStateLoading value)? loading,
+    TResult Function(_TaskListPageStateInitial value)? initial,
     TResult Function(_TaskListPageStateEmpty value)? empty,
     TResult Function(_TaskListPageStateConnectionError value)? connectionError,
+    TResult Function(_TaskListPageStateSignOut value)? signOut,
     TResult Function(_TaskListPageStateIdle value)? idle,
     required TResult orElse(),
   }) {

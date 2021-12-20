@@ -32,9 +32,7 @@ class TaskRepositoryImpl implements TaskRepository {
       () => _taskApiDataSource.createTask(taskRequest)
     );
 
-    print('ANDRII taskResponse: $taskResponse');
-
-    final newTask = _taskMapper(taskResponse);
+    final newTask = _taskMapper(taskResponse.task);
     return newTask.id!;
   }
 
