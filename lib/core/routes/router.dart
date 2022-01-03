@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task_manager/features/domain/task/model/task.dart';
 import 'package:flutter_task_manager/features/presentation/screens/addedittask/add_edit_task_page.dart';
 import 'package:flutter_task_manager/features/presentation/screens/auth/auth_page.dart';
-import 'package:flutter_task_manager/features/presentation/screens/filters/filters_screen.dart';
+import 'package:flutter_task_manager/features/presentation/screens/filters/filter_page.dart';
 import 'package:flutter_task_manager/features/presentation/screens/taskdetails/task_details_page.dart';
 import 'package:flutter_task_manager/features/presentation/screens/tasklist/task_list_page.dart';
 import 'package:get_it/get_it.dart';

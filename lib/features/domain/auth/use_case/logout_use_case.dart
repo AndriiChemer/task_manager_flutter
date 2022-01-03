@@ -3,7 +3,7 @@ import 'package:flutter_task_manager/features/domain/auth/auth_store.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable()
-class LogoutUseCase implements EmptyUseCase<void> {
+class LogoutUseCase implements NoParamUseCase<void> {
   final AuthStore _authStore;
   LogoutUseCase(this._authStore);
 

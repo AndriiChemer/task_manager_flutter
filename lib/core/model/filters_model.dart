@@ -7,4 +7,14 @@ class FiltersModel {
   final List<String> orderByItems = FilterTypes.orderBy;
 
   FiltersModel({required this.sortBy, required this.orderBy});
+
+  FiltersModel copyWith({
+    String? sortBy,
+    String? orderBy
+  }) {
+    return FiltersModel(
+      sortBy: sortBy ?? this.sortBy,
+      orderBy: orderBy ?? this.orderBy,
+    );
+  }
 }

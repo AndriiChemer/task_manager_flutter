@@ -4,7 +4,7 @@ class FilterPopupItem extends StatelessWidget {
   final Widget icon;
   final String text;
   final List<String> items;
-  final Function(BuildContext, String)? onItemSelected;
+  final Function(String)? onItemSelected;
 
   const FilterPopupItem({
     Key? key,
@@ -17,9 +17,7 @@ class FilterPopupItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton(
       onSelected: (value) {
-        if(onItemSelected != null) {
-          onItemSelected!(context, value.toString());
-        }
+        onItemSelected?.call(value.toString());
       },
       itemBuilder: (BuildContext context) => items.map((item) => PopupMenuItem(value: item, child: Text(item),)).toList(),
       child: Container(

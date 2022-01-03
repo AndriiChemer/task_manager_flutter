@@ -16,7 +16,6 @@ class TaskRepositoryImpl implements TaskRepository {
   final TaskApiDataSource _taskApiDataSource;
   final PaginationMapper _paginationMapper;
   final TaskMapper _taskMapper;
-
   final FiltersPreferences _filtersPreferences;
 
   const TaskRepositoryImpl(

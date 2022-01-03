@@ -3,7 +3,7 @@ import 'package:flutter_task_manager/features/domain/auth/auth_store.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable()
-class GetTokenUseCase implements EmptyUseCase<String> {
+class GetTokenUseCase implements NoParamUseCase<String> {
   final AuthStore _authStore;
   GetTokenUseCase(this._authStore);
 

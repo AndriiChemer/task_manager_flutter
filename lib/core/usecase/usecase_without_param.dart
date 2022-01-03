@@ -1,3 +1,3 @@
-abstract class EmptyUseCase<T> {
+abstract class NoParamUseCase<T> {
   Future<T> call();
 }
